@@ -3,13 +3,16 @@
 class MY_Model extends CI_Model {
     const DB_TABLE = 'abstract';
     const DB_TABLE_PK = 'abstract';
+    const DB_LAST_ID_SEQ = 'abstract';
 
     /**
      * Create record.
      */
     private function insert() {
+
+        $this->db->query("select nextval('" . $this::DB_LAST_ID_SEQ . "')");
+        $this->{$this::DB_TABLE_PK} = $this->db->insert_id($this::DB_LAST_ID_SEQ);
         $this->db->insert($this::DB_TABLE, $this);
-        $this->{$this::DB_TABLE_PK} = $this->db->insert_id();
     }
 
     /**
