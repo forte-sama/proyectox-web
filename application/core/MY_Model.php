@@ -9,7 +9,6 @@ class MY_Model extends CI_Model {
      * Create record.
      */
     private function insert() {
-
         $this->db->query("select nextval('" . $this::DB_LAST_ID_SEQ . "')");
         $this->{$this::DB_TABLE_PK} = $this->db->insert_id($this::DB_LAST_ID_SEQ);
         $this->db->insert($this::DB_TABLE, $this);
@@ -19,7 +18,8 @@ class MY_Model extends CI_Model {
      * Update record.
      */
     private function update() {
-        $this->db->update($this::DB_TABLE, $this, $this::DB_TABLE_PK);
+        $this->db->where($this::DB_TABLE_PK, $this->{$this::DB_TABLE_PK});
+        $this->db->update($this::DB_TABLE, $this);
     }
 
     /**
