@@ -19,30 +19,36 @@ class Welcome extends CI_Controller {
 	 * @see http://codeigniter.com/user_guide/general/urls.html
 	 */
 	public function index() {
-		$this->load->view('index');
+		$this->load->view('examples/index');
 	}
 
 	public function blank() {
-		$this->load->view('blank');
+		$this->load->view('examples/blank');
 	}
 
 	public function chart() {
-		$this->load->view('chart');
+		$this->load->view('examples/chart');
 	}
 
 	public function form() {
-		$this->load->view('form');
+		$this->load->view('examples/form');
 	}
 
 	public function tab_panel() {
-		$this->load->view('tab-panel');
+		$this->load->view('examples/tab-panel');
 	}
 
 	public function table() {
-		$this->load->view('table');
+		$this->load->view('examples/table');
 	}
 
 	public function ui() {
-		$this->load->view('ui');
+		$this->load->view('examples/ui');
+	}
+
+	public function myblank() {
+		$this->load->view('header');
+		$this->load->view('blank');
+		$this->load->view('footer');
 	}
 }

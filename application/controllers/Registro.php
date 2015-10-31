@@ -8,6 +8,13 @@ class Registro extends CI_Controller {
 
         $doctores = $this->Doctor->get();
 
+        $this->load->view('header');
         $this->load->view('registro_asistente', array('doctores' => $doctores));
+        $this->load->view('footer');
+    }
+    public function form_doctor() {
+        $this->load->view('header');
+        $this->load->view('registro_doctor');
+        $this->load->view('footer');
     }
 }

@@ -39,15 +39,8 @@
                                         <input class="form-control" placeholder="809-222-2222" />
                                     </div>
                                     <div class="form-group">
-                                        <label>Doctor asociado</label>
-                                        <select class="form-control">
-                                            <?php
-                                            foreach($doctores as $doctor){
-                                                $item = $doctor->cod_doctor . ":&emsp;" . $doctor->username . ", " . $doctor->titulo;
-                                                echo "<option value=\"" . $doctor->cod_doctor . "\">" . $item . "</option>\n";
-                                            }
-                                            ?>
-                                        </select>
+                                        <label>Titulo</label>
+                                        <input class="form-control" placeholder="Pediatra" />
                                     </div>
                                 </div>
 
