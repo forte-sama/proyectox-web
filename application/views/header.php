@@ -8,22 +8,16 @@
     <link href="/assets/css/bootstrap.css" rel="stylesheet" />
     <!-- BOOTSTRAP DATETIMEPICKER STYLES-->
     <link href="/assets/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
-<<<<<<< HEAD
     <!-- MORRIS CHART STYLES-->
-    <!-- <link href="/assets/js/morris/morris-0.4.3.min.css" rel="stylesheet" /> -->
-=======
->>>>>>> T#39 Cambiar plantilla de registro para reflejar datos que contiene un doctor
+    <link href="/assets/js/morris/morris-0.4.3.min.css" rel="stylesheet" />
     <!-- FONTAWESOME STYLES-->
     <link href="/assets/css/font-awesome.css" rel="stylesheet" />
     <!-- CUSTOM STYLES-->
     <link href="/assets/css/custom.css" rel="stylesheet" />
     <!-- GOOGLE FONTS-->
     <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
-<<<<<<< HEAD
     <!-- TABLE STYLES-->
     <link href="/assets/js/dataTables/dataTables.bootstrap.css" rel="stylesheet" />
-=======
->>>>>>> T#39 Cambiar plantilla de registro para reflejar datos que contiene un doctor
 </head>
 <body>
     <div id="wrapper">

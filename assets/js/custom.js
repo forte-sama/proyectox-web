@@ -9,28 +9,7 @@
 
     100% To use For Personal And Commercial Use.
     IN EXCHANGE JUST GIVE US CREDITS AND TELL YOUR FRIENDS ABOUT US
-<<<<<<< HEAD
-
     ========================================================  */
-=======
-
-    ========================================================  */
-
-// Inicializando jqBootstrapValidation
-$(function () {
-    $("input,select,textarea").not("[type=submit]").jqBootstrapValidation();
-});
-
-(function ($) {
-    "use strict";
-    var mainApp = {
-
-        main_fun: function () {
-            /*====================================
-            METIS MENU
-            ======================================*/
-            $('#main-menu').metisMenu();
->>>>>>> T#39 Cambiar plantilla de registro para reflejar datos que contiene un doctor
 
 
 /*========================================================*/
@@ -52,7 +31,6 @@ $(function () {
     });
 });
 
-<<<<<<< HEAD
 /*========================================================*/
 ///Codigo del template
 /*========================================================*/
@@ -61,54 +39,6 @@ $(function () {
     METIS MENU
     ======================================*/
     $('#main-menu').metisMenu();
-=======
-            /*====================================
-    MORRIS LINE CHART
- ======================================*/
-            Morris.Line({
-                element: 'morris-line-chart',
-                data: [{
-                    y: '2006',
-                    a: 100,
-                    b: 90
-                }, {
-                    y: '2007',
-                    a: 75,
-                    b: 65
-                }, {
-                    y: '2008',
-                    a: 50,
-                    b: 40
-                }, {
-                    y: '2009',
-                    a: 75,
-                    b: 65
-                }, {
-                    y: '2010',
-                    a: 50,
-                    b: 40
-                }, {
-                    y: '2011',
-                    a: 75,
-                    b: 65
-                }, {
-                    y: '2012',
-                    a: 100,
-                    b: 90
-                }],
-                xkey: 'y',
-                ykeys: ['a', 'b'],
-                labels: ['Series A', 'Series B'],
-                hideHover: 'auto',
-                resize: true
-            });
-
-
-        },
-
-        initialization: function () {
-            mainApp.main_fun();
->>>>>>> T#39 Cambiar plantilla de registro para reflejar datos que contiene un doctor
 
     /*====================================
       LOAD APPROPRIATE MENU BAR

@@ -4,12 +4,8 @@
     <div id="page-inner">
         <div class="row">
             <div class="col-md-12">
-                <h2>Registro</h2>
+                <h2>Registro de Doctor</h2>
                 <h5>Por favor llene los campos a continuación.</h5>
-<<<<<<< HEAD
-=======
-
->>>>>>> T#39 Cambiar plantilla de registro para reflejar datos que contiene un doctor
             </div>
         </div>
         <!-- /. ROW  -->
@@ -23,119 +19,143 @@
                     </div>
                     <div class="panel-body">
                         <div class="row">
-<<<<<<< HEAD
-                            <form>
+                            <form action="form_doctor" method="post">
+                                <input type="hidden" name="form" value="true">
                                 <div class="col-md-6">
                                     <h3>Datos de Cuenta</h3>
-=======
-                            <div class="col-md-6">
-                                <h3>Datos de Cuenta</h3>
-                                <form role="form">
->>>>>>> T#39 Cambiar plantilla de registro para reflejar datos que contiene un doctor
-                                    <div class="form-group">
-                                        <label>Nombre de Usuario</label>
-                                        <input class="form-control" placeholder="ejemplo789" />
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Contraseña</label>
-                                        <input type="password" class="form-control" placeholder="******" />
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Correo Electronico</label>
-                                        <input class="form-control" placeholder="correo@ejemplo.com" />
-                                    </div>
-<<<<<<< HEAD
-=======
-                                    <!-- jqBootstrapValidation's structure -->
-                                    <!-- <div class="control-group">
-                                        <label class="control-label">Email address</label>
+                                    <div class="control-group">
+                                        <label class="control-label">Nombre de usuario</label>
                                         <div class="controls">
-                                            <input type="email" placeholder="correo@ejemplo.com" />
+                                            <input type="text"
+                                            class="form-control"
+                                            name="username"
+                                            maxlength="40"
+                                            pattern="([a-z])([a-z]|[0-9]|_)*"
+                                            data-validation-pattern-message="Debe comenzar con letra, luego cualquier cantidad de numeros, letras, o _"
+                                            required
+                                            />
                                             <p class="help-block"></p>
                                         </div>
-                                    </div> -->
->>>>>>> T#39 Cambiar plantilla de registro para reflejar datos que contiene un doctor
-                                    <div class="form-group">
-                                        <label>Telefono</label>
-                                        <input class="form-control" placeholder="809-222-2222" />
                                     </div>
-                                    <div class="form-group">
-<<<<<<< HEAD
-                                        <label>Titulo</label>
-                                        <input class="form-control" placeholder="Pediatra" />
+                                    <div class="control-group">
+                                        <label class="control-label">Contraseña</label>
+                                        <div class="controls">
+                                            <input type="password"
+                                            class="form-control"
+                                            name="password"
+                                            minlength="8"
+                                            maxlength="25"
+                                            data-validation-minlength-message="No debe ser tan corta (Debe ser de 8 a 25 letras)"
+                                            required
+                                            />
+                                            <p class="help-block"></p>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label">Correo Electronico</label>
+                                        <div class="controls">
+                                            <input type="email"
+                                            class="form-control"
+                                            name="email"
+                                            minlength="11"
+                                            maxlength="45"
+                                            data-validation-minlength-message="Email muy corto, intenta con otro"
+                                            data-validation-email-message="Formato de email no valido (usuario@ejemplo.com)"
+                                            required
+                                            />
+                                            <p class="help-block"></p>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label">Titulo de ejercicio</label>
+                                        <div class="controls">
+                                            <input type="text"
+                                            class="form-control"
+                                            name="titulo"
+                                            maxlength="70"
+                                            pattern="([a-z]|[A-Z])+(([a-z]|[A-Z])|\ )*"
+                                            data-validation-pattern-message="Solo letras y espacios en su titulo"
+                                            data-validation-maxlength-message="Titulo demasiado grande"
+                                            required
+                                            />
+                                            <p class="help-block"></p>
+                                        </div>
                                     </div>
                                 </div>
-
                                 <div class="col-md-6">
-                                    <h3>Datos de Usuario</h3>
-=======
-                                        <label>Especialidad</label>
-                                        <input class="form-control" placeholder="Ginecólogo" />
-                                    </div>
-                                </form>
-                            </div>
-
-                            <div class="col-md-6">
                                 <h3>Datos de Usuario</h3>
-                                <form role="form">
->>>>>>> T#39 Cambiar plantilla de registro para reflejar datos que contiene un doctor
-                                    <div class="form-group">
-                                        <label>Nombre/s</label>
-                                        <input class="form-control" />
+                                <div class="control-group">
+                                        <label class="control-label">Nombre/s</label>
+                                        <div class="controls">
+                                            <input type="text"
+                                            class="form-control"
+                                            name="nombre"
+                                            maxlength="40"
+                                            pattern="([a-z]|[A-Z])+(([a-z]|[A-Z])|\ )*"
+                                            data-validation-pattern-message="Solo letras y espacio entre nombres"
+                                            required
+                                            />
+                                            <p class="help-block"></p>
+                                        </div>
                                     </div>
-                                    <div class="form-group">
-<<<<<<< HEAD
-                                        <label>Apellido/s</label>
-=======
-                                        <label>Apellidos</label>
->>>>>>> T#39 Cambiar plantilla de registro para reflejar datos que contiene un doctor
-                                        <input class="form-control" />
+                                    <div class="control-group">
+                                        <label class="control-label">Apellido/s</label>
+                                        <div class="controls">
+                                            <input type="text"
+                                            class="form-control"
+                                            name="apellido"
+                                            maxlength="40"
+                                            pattern="([a-z]|[A-Z])+(([a-z]|[A-Z])|\ )*"
+                                            data-validation-pattern-message="Solo letras y espacio entre apellidos"
+                                            required
+                                            />
+                                            <p class="help-block"></p>
+                                        </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label>Telefono</label>
-                                        <input class="form-control" placeholder="809-222-2222" />
+                                    <div class="control-group">
+                                        <label class="control-label">Telefono</label>
+                                        <div class="controls">
+                                            <input type="text"
+                                            class="form-control"
+                                            name="telefono"
+                                            placeholder="809-555-8888"
+                                            maxlength="40"
+                                            pattern="(8[024]9-)(\d{3}-)\d{4}"
+                                            data-validation-pattern-message="Numero de telefono no valido para Rep. Dom."
+                                            required
+                                            />
+                                            <p class="help-block"></p>
+                                        </div>
                                     </div>
-                                    <label>Sexo</label>
-                                    <div class="form-group">
-<<<<<<< HEAD
-=======
-
->>>>>>> T#39 Cambiar plantilla de registro para reflejar datos que contiene un doctor
+                                    <div class="control-group">
+                                        <label class="control-label">Sexo</label><br/>
                                         <div class="radio-inline">
                                             <label>
-                                                <input type="radio" name="optionsRadios" id="optionsRadios1" value="M" checked />Masculino
+                                                <input type="radio" name="sexo" value="M" checked/>Masculino
                                             </label>
                                         </div>
                                         <div class="radio-inline">
                                             <label>
-                                                <input type="radio" name="optionsRadios" id="optionsRadios2" value="F"/Welcome/>Femenino
+                                                <input type="radio" name="sexo" value="F"/Welcome/>Femenino
                                             </label>
                                         </div>
                                     </div>
-<<<<<<< HEAD
-                                    <label>Fecha de nacimiento</label>
-                                    <div class='input-group date' id='datetimepicker1'>
-                                        <input type='text' class="form-control" onkeydown="return false"/>
-                                        <span class="input-group-addon">
-                                            <span class="fa fa-calendar"></span>
-                                        </span>
+                                    <br>
+                                    <label class="control-label">Fecha de nacimiento</label>
+                                    <div class="control-group">
+                                        <div class='input-group date' id='datetimepicker1'>
+                                            <span class="input-group-addon">
+                                                <span class="fa fa-calendar"></span>
+                                            </span>
+                                            <input name="fecha_nacimiento" type='text' class="form-control" onkeydown="return false" required/>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-md-offset-3">
-                                    <a class="btn btn-danger btn-block">Registrarme</a>
+                                    <br>
+                                    <button type="submit" class="btn btn-danger btn-block">Registrarme</button>
                                 </div>
                             </form>
-=======
-                                    <div class="form-group">
-                                        <label>Fecha de nacimiento</label>
-                                        <input class="form-control" placeholder="809-222-2222" />
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="submit" class="form-control" value="Submit" />
-                                    </div>
-                                </form>
-                            </div>
->>>>>>> T#39 Cambiar plantilla de registro para reflejar datos que contiene un doctor
                         </div>
                     </div>
                 </div>
@@ -143,7 +163,7 @@
         </div>
     </div>
 </div>
-<<<<<<< HEAD
-=======
+
 <!-- /. WRAPPER  -->
->>>>>>> T#39 Cambiar plantilla de registro para reflejar datos que contiene un doctor
+
+<!-- SCRIPTS ESPECIFICOS PARA ESTA VISTA -->
