@@ -1,4 +1,5 @@
 <div id="annual"></div>
+
 <!-- SCRIPTS -AT THE BOTOM TO REDUCE THE LOAD TIME-->
 <!-- JQUERY SCRIPTS -->
 <script src="/assets/js/jquery-1.10.2.js"></script>
