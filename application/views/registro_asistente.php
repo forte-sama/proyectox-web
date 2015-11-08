@@ -162,6 +162,3 @@
 </div>
 
 <!-- SCRIPTS ESPECIFICOS PARA ESTA VISTA -->
-
-<!-- VERIFY.JS SCRIPTS -->
-<script src="/assets/js/verify.notify.js"></script>

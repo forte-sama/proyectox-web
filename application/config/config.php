@@ -314,11 +314,7 @@ $config['cache_query_string'] = FALSE;
 | http://codeigniter.com/user_guide/libraries/encryption.html
 |
 */
-<<<<<<< HEAD
-$config['encryption_key'] = getenv('CI_KEY');
-=======
 $config['encryption_key'] = '';
->>>>>>> cf1f1a9... T#42 Crear nuevo método para manejar peticiones de edición de datos de usuarios moviles
 
 /*
 |--------------------------------------------------------------------------
