@@ -40,6 +40,11 @@ class API extends CI_Controller {
             $nuevo_usuario->fecha_nacimiento=$data['fecha_nacimiento'];
             $nuevo_usuario->tipo_sangre=$data['tipo_sangre'];
             $nuevo_usuario->save();
+<<<<<<< HEAD
+=======
+
+            echo "wei";
+>>>>>>> cf1f1a9... T#42 Crear nuevo método para manejar peticiones de edición de datos de usuarios moviles
     }
 
     public function request_edicion(){
@@ -80,6 +85,11 @@ class API extends CI_Controller {
             $nuevo_usuario->fecha_nacimiento=$data['fecha_nacimiento'];
             $nuevo_usuario->tipo_sangre=$data['tipo_sangre'];
             $nuevo_usuario->save();
+<<<<<<< HEAD
+=======
+
+            echo "wei editado";
+>>>>>>> cf1f1a9... T#42 Crear nuevo método para manejar peticiones de edición de datos de usuarios moviles
     }
 
 }

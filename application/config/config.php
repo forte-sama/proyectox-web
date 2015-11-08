@@ -11,13 +11,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 |	http://example.com/
 |
-| If this is not set then CodeIgniter will try guess the protocol, domain
-| and path to your installation. However, you should always configure this
-| explicitly and never rely on auto-guessing, especially in production
-| environments.
+| WARNING: You MUST set this value!
+|
+| If it is not set, then CodeIgniter will try guess the protocol and path
+| your installation, but due to security concerns the hostname will be set
+| to $_SERVER['SERVER_ADDR'] if available, or localhost otherwise.
+| The auto-detection mechanism exists only for convenience during
+| development and MUST NOT be used in production!
+|
+| If you need to allow multiple domains, remember that this file is still
+| a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'https://' . getenv('OPENSHIFT_APP_DNS') . '/';
+$config['base_url'] = '';
 
 /*
 |--------------------------------------------------------------------------
@@ -190,8 +196,6 @@ $config['directory_trigger'] = 'd';
 | Error Logging Threshold
 |--------------------------------------------------------------------------
 |
-| If you have enabled error logging, you can set an error threshold to
-| determine what gets logged. Threshold options are:
 | You can enable error logging by setting a threshold over zero. The
 | threshold determines what gets logged. Threshold options are:
 |
@@ -209,7 +213,7 @@ $config['directory_trigger'] = 'd';
 | your log files will fill up very fast.
 |
 */
-$config['log_threshold'] = getenv('CI_ENV') == 'development' ? 4 : 0; // no logging in production
+$config['log_threshold'] = 0;
 
 /*
 |--------------------------------------------------------------------------
@@ -220,7 +224,7 @@ $config['log_threshold'] = getenv('CI_ENV') == 'development' ? 4 : 0; // no logg
 | application/logs/ directory. Use a full server path with trailing slash.
 |
 */
-$config['log_path'] = getenv('OPENSHIFT_LOG_DIR');
+$config['log_path'] = '';
 
 /*
 |--------------------------------------------------------------------------
@@ -234,7 +238,7 @@ $config['log_path'] = getenv('OPENSHIFT_LOG_DIR');
 | Note: Leaving it blank will default to 'php'.
 |
 */
-$config['log_file_extension'] = 'log';
+$config['log_file_extension'] = '';
 
 /*
 |--------------------------------------------------------------------------
@@ -279,7 +283,7 @@ $config['error_views_path'] = '';
 | application/cache/ directory.  Use a full server path with trailing slash.
 |
 */
-$config['cache_path'] = getenv('OPENSHIFT_DATA_DIR') . 'storage/framework/cache';
+$config['cache_path'] = '';
 
 /*
 |--------------------------------------------------------------------------
@@ -310,7 +314,11 @@ $config['cache_query_string'] = FALSE;
 | http://codeigniter.com/user_guide/libraries/encryption.html
 |
 */
+<<<<<<< HEAD
 $config['encryption_key'] = getenv('CI_KEY');
+=======
+$config['encryption_key'] = '';
+>>>>>>> cf1f1a9... T#42 Crear nuevo método para manejar peticiones de edición de datos de usuarios moviles
 
 /*
 |--------------------------------------------------------------------------
@@ -332,9 +340,11 @@ $config['encryption_key'] = getenv('CI_KEY');
 |
 | 'sess_save_path'
 |
-|	The location to save sessions to, driver dependant.
+|	The location to save sessions to, driver dependent.
 |
 |	For the 'files' driver, it's a path to a writable directory.
+|	WARNING: Only absolute paths are supported!
+|
 |	For the 'database' driver, it's a table name.
 |	Please read up the manual for the format with other session drivers.
 |
@@ -343,6 +353,9 @@ $config['encryption_key'] = getenv('CI_KEY');
 | 'sess_match_ip'
 |
 |	Whether to match the user's IP address when reading the session data.
+|
+|	WARNING: If you're using the database driver, don't forget to update
+|	         your session table's PRIMARY KEY when changing this setting.
 |
 | 'sess_time_to_update'
 |
@@ -361,7 +374,7 @@ $config['encryption_key'] = getenv('CI_KEY');
 $config['sess_driver'] = 'files';
 $config['sess_cookie_name'] = 'ci_session';
 $config['sess_expiration'] = 7200;
-$config['sess_save_path'] = getenv('OPENSHIFT_DATA_DIR') . 'storage/framework/sessions';
+$config['sess_save_path'] = NULL;
 $config['sess_match_ip'] = FALSE;
 $config['sess_time_to_update'] = 300;
 $config['sess_regenerate_destroy'] = FALSE;
@@ -480,9 +493,10 @@ $config['time_reference'] = 'local';
 | can rewrite the tags on-the-fly, enabling you to utilize that syntax
 | in your view files.  Options are TRUE or FALSE (boolean)
 |
+| Note: You need to have eval() enabled for this to work.
+|
 */
 $config['rewrite_short_tags'] = FALSE;
-
 
 /*
 |--------------------------------------------------------------------------
@@ -500,4 +514,4 @@ $config['rewrite_short_tags'] = FALSE;
 | Comma-separated:	'10.0.1.200,192.168.5.0/24'
 | Array:		array('10.0.1.200', '192.168.5.0/24')
 */
-$config['proxy_ips'] = getenv('OPENSHIFT_HAPROXY_IP') ?: '';
+$config['proxy_ips'] = '';

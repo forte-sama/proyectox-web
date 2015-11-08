@@ -1,8 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-// AHA!
-
 /*
 | -------------------------------------------------------------------
 | DATABASE CONNECTIVITY SETTINGS
@@ -72,17 +70,22 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | The $query_builder variables lets you determine whether or not to load
 | the query builder class.
 */
-
 $active_group = 'default';
 $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
+	'port'	   => '5432',
+	'hostname' => 'ec2-107-21-222-62.compute-1.amazonaws.com',
+	'username' => 'nhutpnuvljbifo',
+	'password' => 'QpLkhIbJCGLVHU-81cbZ7DGsK8',
+	'database' => 'ddiphlo5msandf',
+	'dbdriver' => 'postgre',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
 	'db_debug' => (ENVIRONMENT !== 'production'),
 	'cache_on' => FALSE,
-	'cachedir' => getenv('OPENSHIFT_DATA_DIR') . 'storage/framework/dbcache',
+	'cachedir' => '',
 	'char_set' => 'utf8',
 	'dbcollat' => 'utf8_general_ci',
 	'swap_pre' => '',
@@ -92,16 +95,3 @@ $db['default'] = array(
 	'failover' => array(),
 	'save_queries' => TRUE
 );
-
-$db['default']['dbdriver'] = 'postgre';
-$db['default']['hostname'] = getenv('OPENSHIFT_POSTGRESQL_DB_HOST');
-$db['default']['port'] = getenv('OPENSHIFT_POSTGRESQL_DB_PORT');
-$db['default']['username'] = getenv('OPENSHIFT_POSTGRESQL_DB_USERNAME');
-$db['default']['password'] = getenv('OPENSHIFT_POSTGRESQL_DB_PASSWORD');
-$db['default']['database'] = getenv('OPENSHIFT_APP_NAME');
-
-// $db['default']['hostname'] = 'localhost';
-// $db['default']['port'] = 5432;
-// $db['default']['username'] = 'forte';
-// $db['default']['password'] = 'jolopero1';
-// $db['default']['database'] = 'forte';
