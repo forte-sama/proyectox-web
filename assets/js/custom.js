@@ -31,6 +31,21 @@ $(function () {
     });
 });
 
+$(function () {
+    $("#datetimepicker2").datetimepicker({
+        format: "LT",
+        maxDate: new moment().format()
+    });
+});
+
+$(function () {
+
+    $("#datetimepicker3").datetimepicker({
+        format: "ll",
+        minDate: new moment().format()
+    });
+});
+
 /*========================================================*/
 ///Codigo del template
 /*========================================================*/
