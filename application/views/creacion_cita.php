@@ -1,3 +1,5 @@
+<?= $template_header; ?>
+<?= $template_navigation; ?>
 
 <!-- /. NAV SIDE  -->
 <div id="page-wrapper" >
@@ -19,6 +21,11 @@
                     </div>
                     <div class="panel-body">
                         <div class="row">
+                            <ul>
+                                <?= validation_errors(); ?>
+                            </ul>
+                        </div>
+                        <div class="row">
                             <form action="form_asistente" method="post">
                                 <input type="hidden" name="form" value="true">
                                 <div class="col-md-6 col-md-offset-3">
@@ -39,7 +46,7 @@
                                   </div>
                                   <label class="control-label">Fecha Programada</label>
                                   <div class="control-group">
-                                      <div class='input-group date' id='datetimepicker3'>
+                                      <div class='input-group date' id='creacion_cita_fecha'>
                                           <span class="input-group-addon">
                                               <span class="fa fa-calendar"></span>
                                           </span>
@@ -49,7 +56,7 @@
                                   <p>
                                   <label class="control-label">Hora</label>
                                   <div class="control-group">
-                                      <div class='input-group date' id='datetimepicker2'>
+                                      <div class='input-group date' id='creacion_cita_hora'>
                                           <span class="input-group-addon">
                                               <span class="fa fa-calendar"></span>
                                           </span>
@@ -57,8 +64,6 @@
                                       </div>
                                   </div>
 
-
-                                </div>
 
 
                                 <div class="col-md-4 col-md-offset-4">
@@ -74,7 +79,5 @@
     </div>
 </div>
 
+<?= $template_footer; ?>
 <!-- SCRIPTS ESPECIFICOS PARA ESTA VISTA -->
-
-<!-- VERIFY.JS SCRIPTS -->
-<script src="/assets/js/verify.notify.js"></script>

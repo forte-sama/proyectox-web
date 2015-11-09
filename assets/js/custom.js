@@ -23,24 +23,24 @@ $(function () {
     $("input,select,textarea").not("[type=submit]").jqBootstrapValidation();
 });
 
-// Inicializando datepicker de algun formulario
+// Inicializando datepicker de formulario de registro de asistente y doctor
 $(function () {
-    $("#datetimepicker1").datetimepicker({
+    $("#datepicker_doctor,#datepicker_asistente").datetimepicker({
         format: "ll",
         maxDate: new moment().format()
     });
 });
 
+//Inicializando datepicker en formulario de creacion de cita (fecha)
 $(function () {
-    $("#datetimepicker2").datetimepicker({
-        format: "LT",
-        maxDate: new moment().format()
+    $("#creacion_cita_hora").datetimepicker({
+        format: "LT"
     });
 });
 
+//Inicializando datepicker en formulario de creacion de cita (hora)
 $(function () {
-
-    $("#datetimepicker3").datetimepicker({
+    $("#creacion_cita_fecha").datetimepicker({
         format: "ll",
         minDate: new moment().format()
     });

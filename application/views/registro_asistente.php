@@ -1,4 +1,5 @@
-
+<?= $template_header; ?>
+<?= $template_navigation; ?>
 <!-- /. NAV SIDE  -->
 <div id="page-wrapper" >
     <div id="page-inner">
@@ -19,7 +20,13 @@
                     </div>
                     <div class="panel-body">
                         <div class="row">
-                            <form action="form_asistente" method="post">
+                            <ul>
+                                <?= validation_errors(); ?>
+                            </ul>
+                            <?= $form_success; ?>
+                        </div>
+                        <div class="row">
+                            <form action="/index.php/asistentes/crear/" method="post">
                                 <input type="hidden" name="form" value="true">
                                 <div class="col-md-6">
                                     <h3>Datos de Cuenta</h3>
@@ -29,6 +36,7 @@
                                             <input type="text"
                                             class="form-control"
                                             name="username"
+                                            value="<?= set_value("username"); ?>"
                                             maxlength="40"
                                             pattern="([a-z])([a-z]|[0-9]|_)*"
                                             data-validation-pattern-message="Debe comenzar con letra, luego cualquier cantidad de numeros, letras, o _"
@@ -57,6 +65,7 @@
                                             <input type="email"
                                             class="form-control"
                                             name="email"
+                                            value="<?= set_value("email"); ?>"
                                             minlength="11"
                                             maxlength="45"
                                             data-validation-minlength-message="Email muy corto, intenta con otro"
@@ -87,6 +96,7 @@
                                             <input type="text"
                                             class="form-control"
                                             name="nombre"
+                                            value="<?= set_value("nombre"); ?>"
                                             maxlength="40"
                                             pattern="([a-z]|[A-Z])+(([a-z]|[A-Z])|\ )*"
                                             data-validation-pattern-message="Solo letras y espacio entre nombres"
@@ -101,6 +111,7 @@
                                             <input type="text"
                                             class="form-control"
                                             name="apellido"
+                                            value="<?= set_value("apellido"); ?>"
                                             maxlength="40"
                                             pattern="([a-z]|[A-Z])+(([a-z]|[A-Z])|\ )*"
                                             data-validation-pattern-message="Solo letras y espacio entre apellidos"
@@ -115,6 +126,7 @@
                                             <input type="text"
                                             class="form-control"
                                             name="telefono"
+                                            value="<?= set_value("telefono"); ?>"
                                             placeholder="809-555-8888"
                                             maxlength="40"
                                             pattern="(8[024]9-)(\d{3}-)\d{4}"
@@ -140,11 +152,11 @@
                                     <br>
                                     <label class="control-label">Fecha de nacimiento</label>
                                     <div class="control-group">
-                                        <div class='input-group date' id='datetimepicker1'>
+                                        <div class='input-group date' id='datepicker_asistente'>
                                             <span class="input-group-addon">
                                                 <span class="fa fa-calendar"></span>
                                             </span>
-                                            <input name="fecha_nacimiento" type='text' class="form-control" onkeydown="return false" required/>
+                                            <input name="fecha_nacimiento" type='text' class="form-control" onkeydown="return false" value="<?= set_value("fecha_nacimiento"); ?>" required/>
                                         </div>
                                     </div>
                                 </div>
@@ -160,5 +172,7 @@
         </div>
     </div>
 </div>
+
+<?= $template_footer; ?>
 
 <!-- SCRIPTS ESPECIFICOS PARA ESTA VISTA -->
