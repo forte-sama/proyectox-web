@@ -26,7 +26,7 @@
                             <?= $form_success; ?>
                         </div>
                         <div class="row">
-                            <form action="/index.php/asistentes/crear/" method="post">
+                            <form action="<?= base_url('asistentes/crear'); ?>" method="post">
                                 <input type="hidden" name="form" value="true">
                                 <div class="col-md-6">
                                     <h3>Datos de Cuenta</h3>

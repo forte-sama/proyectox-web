@@ -10,7 +10,7 @@
             <div class="modal-header">
                 <h3 class="modal-title" id="myModalLabel">Inicio de sesion</h3>
             </div>
-            <form action="/index.php/site/login/" method="post">
+            <form action="<?= base_url('site/login'); ?>" method="post">
                 <div class="modal-body">
                     <input type="hidden" name="form" value="true">
                     <div class="control-group">
@@ -41,6 +41,10 @@
                             />
                             <p class="help-block"></p>
                         </div>
+                    </div>
+                    <div class="row">
+                        <?= validation_errors(); ?>
+                        <?= $no_user_pass; ?>
                     </div>
                 </div>
                 <div class="modal-footer">

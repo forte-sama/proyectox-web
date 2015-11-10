@@ -26,7 +26,7 @@
                             </ul>
                         </div>
                         <div class="row">
-                            <form action="form_asistente" method="post">
+                            <form action="<?= base_url('colas/crear_cita'); ?>" method="post">
                                 <input type="hidden" name="form" value="true">
                                 <div class="col-md-6 col-md-offset-3">
                                   <div class="control-group">

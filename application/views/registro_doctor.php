@@ -27,7 +27,7 @@
                             <?= $form_success; ?>
                         </div>
                         <div class="row">
-                            <form action="/index.php/doctores/crear/" method="post">
+                            <form action="<?= base_url('doctores/crear'); ?>" method="post">
                                 <input type="hidden" name="form" value="true">
                                 <div class="col-md-6">
                                     <h3>Datos de Cuenta</h3>
