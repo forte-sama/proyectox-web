@@ -35,6 +35,12 @@ body {
     min-height:1200px;
 }
 
+.vcenter {
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
+}
+
 .text-center {
     text-align:center;
 }
