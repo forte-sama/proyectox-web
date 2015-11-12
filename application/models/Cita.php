@@ -11,4 +11,20 @@ class Cita extends MY_Model {
     public $doctor;
     public $usuario_movil;
     public $estado_cita;
+
+    public function get($limit=0,$offset=0,$parent_get=TRUE){
+      if ($parent_get){
+        return parent::get($limit,$offset);
+      }
+      else{
+        $ret_val = array();
+        $query = $this->db->get_where($this::DB_TABLE, array(
+            "fecha" => $this->fecha,
+            "doctor"=> $this->doctor
+        ));
+        return $query->result();
+      }
+
+}
+
 }

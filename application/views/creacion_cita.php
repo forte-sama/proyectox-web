@@ -24,6 +24,7 @@
                             <ul>
                                 <?= validation_errors(); ?>
                             </ul>
+                            <?= $form_success;?>
                         </div>
                         <div class="row">
                             <form action="<?= base_url('colas/crear_cita'); ?>" method="post">
