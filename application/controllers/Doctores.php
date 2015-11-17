@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Doctores extends CI_Controller {
 
-public function crear() {
+    public function crear() {
         $this->load->helper('form');
         $data = array('form_success' => '');
 
@@ -55,10 +55,11 @@ public function crear() {
                array(
                    'field' => 'telefono',
                    'label' => 'Telefono',
-                   'rules' => array('required','regex_match[/(8[024]9-)(\d{3}-)\d{4}/]'),
+                   'rules' => array('required','regex_match[/(8[024]9-)(\d{3}-)\d{4}/]','is_unique[usuario.telefono]'),
                     'errors' => array(
                             'required'    => 'Debes incluir un %s.',
                             'regex_match' => 'Este %s no parece ser un telefono valido para Rep. Dom.',
+                            'is_unique'   => 'Este %s ya esta en uso.'
                     ),
                ),
                array(
@@ -123,7 +124,12 @@ public function crear() {
                 $new->save();
 
                 //incluir msg de exito
-                $data['form_success'] = $this->load->view('template/form_success','',TRUE);
+                $form_success_data = array();
+                $form_success_data['message_type'] = "alert-success";
+                $form_success_data['message'] =  'Felicidades! Has podido registrarte, ahora puedes '
+                                                . anchor(base_url("site/login"),'Iniciar sesion','class="btn btn-success"');
+
+                $data['form_success'] = $this->load->view('template/form_success',$form_success_data,TRUE);
             }
             //FALLA : Vuelve al formulario
         }

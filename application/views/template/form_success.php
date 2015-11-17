@@ -1,4 +1,6 @@
-<div class="alert alert-success" role="alert">
-    Felicidades! Has podido registrarte, ahora puedes <a class="btn btn-success" href="<?= base_url('site/login'); ?>">iniciar sesion</a>
-    <br />
+<div class="col col-md-12">
+    <div class="alert <?= $message_type; ?>" role="alert">
+        <?= $message; ?>
+        <br />
+    </div>
 </div>

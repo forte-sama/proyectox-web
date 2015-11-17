@@ -21,8 +21,8 @@
                             name="login_name"
                             value="<?= set_value("login_name"); ?>"
                             maxlength="40"
-                            pattern="([a-z])([a-z]|[0-9]|_)*"
-                            data-validation-pattern-message="Debe comenzar con letra, luego cualquier cantidad de numeros, letras, o _"
+                            pattern="(\w|[^ ])*"
+                            data-validation-pattern-message="No deberia contener espacios"
                             required
                             />
                             <p class="help-block"></p>

@@ -2,6 +2,26 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Site extends CI_Controller {
+    private function crear_fila($user_code) {
+        //load dependencies
+        $this->load->model('Fila');
+
+        //cargar fila de la base de datos
+        $new = new Fila();
+        $new->load_by('asistente',$user_code);
+
+        //si la fila no fue cargada, entonces hay que crearla
+        if(!isset($new->cod_fila)) {
+            //formato para fecha
+            $format = "%d %m %Y";
+
+            $new->asistente = $user_code;
+            $new->fecha = mdate($format,now());
+            //insertar nueva fila en tabla correspondiente
+            $new->save();
+        }
+    }
+
     public function index() {
         session_start();
 
@@ -13,12 +33,18 @@ class Site extends CI_Controller {
         echo '<a href="' . base_url('site/logout/') . '/">Logout</a>';
     }
 
+    private function limpiar_fila($user_code) {
+        ;
+    }
+
     public function logout() {
         session_start();
 
         if(!isset($_SESSION['username'])) {
             redirect(base_url('site/login/'), 'refresh');
         }
+
+        $this->limpiar_fila($_SESSION['user_code']);
 
         session_unset();
         setcookie(session_name(),'',0,'/');
@@ -30,7 +56,7 @@ class Site extends CI_Controller {
         session_start();
 
         if(isset($_SESSION['username'])) {
-            redirect('site/index/', 'refresh');
+            redirect(base_url('site/index/'), 'refresh');
         }
 
         $this->load->helper('form');
@@ -56,45 +82,87 @@ class Site extends CI_Controller {
 
             //revalidar datos formulario
             $this->form_validation->set_rules(array(
-               array(
-                   'field' => 'login_name',
-                   'label' => 'Nombre de usuario o Email',
-                   'rules' => array('required','alpha_numeric'),
+                array(
+                    'field' => 'login_name',
+                    'label' => 'Nombre de usuario o Email',
+                    'rules' => array('required'),
                     'errors' => array(
-                        'required'      => 'Debes incluir un %s.',
-                        'alpha_numeric' => 'tu %s incluye algo mas que solo letras y numeros.',
+                        'required' => 'Debes incluir un %s.',
                     ),
-               ),
-               array(
-                   'field' => 'password',
-                   'label' => 'Contraseña',
-                   'rules' => array('required','alpha_numeric'),
+                ),
+                array(
+                    'field' => 'password',
+                    'label' => 'Contraseña',
+                    'rules' => array('required','alpha_numeric'),
                     'errors' => array(
                         'required'      => 'Debes incluir un %s.',
                         'alpha_numeric' => '%s incluye algo mas que solo letras y numeros.',
                     ),
-               ),
+                ),
             ));
 
             //EXITO : Las validaciones pasaron
             if($this->form_validation->run() && ($type = $this->valid_user($login_name, $password)) !== 'nada'){
                 //iniciar sesion
-                $_SESSION['username'] = $login_name;
-                $_SESSION['user_type'] = $type;
+                $this->set_session_values($login_name, $type);
                 //redireccionar a site/index
-                    redirect(base_url('site/index/'), 'refresh');
+                redirect(base_url('site/index/'), 'refresh');
             }
             //FALLA : Vuelve al formulario
             else{
-        		$data['no_user_pass'] = '<li>no existe usuario/contrasena</li>';
+                $data['no_user_pass'] = '<li>no existe usuario/contrasena</li>';
             }
         }
 
-		//vistas anidadas
-		$data['template_header'] = $this->load->view('template/header','',TRUE);
-		$data['template_footer'] = $this->load->view('template/footer','',TRUE);
+        //vistas anidadas
+        $data['template_header'] = $this->load->view('template/header','',TRUE);
+        $data['template_footer'] = $this->load->view('template/footer','',TRUE);
 
-		$this->load->view('login',$data);
+        $this->load->view('login',$data);
+    }
+
+    private function set_session_values($login_name, $user_type) {
+        //declarar variables con valor dummy
+        $new = 1;
+        $doctor_val = 0;
+        $found_asistente = FALSE;
+
+        //busqueda de asistente
+        if($user_type == 'asistente') {
+            $new = new Asistente();
+            $new->load_by('username', $login_name);
+
+            if(!isset($new->cod_asistente)) {
+                $new->load_by('email', $login_name);
+            }
+
+            //generar valor del codigo del doctor
+            $doctor_val = $new->doctor_cod_doctor;
+
+            //indicar que se puede crear fila para doctor (fila vacia)
+            $found_asistente = TRUE;
+        }
+        //busqueda de doctor
+        else if($user_type == 'doctor') {
+            $new = new Doctor();
+            $new->load_by('username', $login_name);
+
+            if(!isset($new->cod_doctor)) {
+                $new->load_by('email', $login_name);
+            }
+
+            //generar valor del codigo del doctor
+            $doctor_val = $new->cod_doctor;
+        }
+
+        //generar datos de la sesion
+        $_SESSION['doctor']    = $doctor_val;
+        $_SESSION['username']  = $new->username;
+        $_SESSION['user_code'] = $new->{'cod_' . $user_type};
+        $_SESSION['user_type'] = $user_type;
+
+        if($found_asistente == TRUE)
+        $this->crear_fila($_SESSION['user_code']);
     }
 
     private function valid_user($login_user, $password) {

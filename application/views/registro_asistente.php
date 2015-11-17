@@ -60,6 +60,21 @@
                                         </div>
                                     </div>
                                     <div class="control-group">
+                                        <label class="control-label">Confirmar contraseña</label>
+                                        <div class="controls">
+                                            <input type="password"
+                                            class="form-control"
+                                            name="password2"
+                                            minlength="8"
+                                            maxlength="25"
+                                            data-validation-match-match="password"
+                                            data-validation-match-message="Las contraseñas no coinciden"
+                                            required
+                                            />
+                                            <p class="help-block"></p>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
                                         <label class="control-label">Correo Electronico</label>
                                         <div class="controls">
                                             <input type="email"
