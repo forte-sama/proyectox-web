@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Site extends CI_Controller {
     private function crear_fila($user_code) {
         //load dependencies
-        $this->load->model('Fila');
+        $this->load->model(array('Fila','Cita','Fila_turno'));
 
         //cargar fila de la base de datos
         $new = new Fila();
@@ -13,12 +13,29 @@ class Site extends CI_Controller {
         //si la fila no fue cargada, entonces hay que crearla
         if(!isset($new->cod_fila)) {
             //formato para fecha
-            $format = "%d %m %Y";
+            $format = "%M-%d-%Y";
 
             $new->asistente = $user_code;
             $new->fecha = mdate($format,now());
             //insertar nueva fila en tabla correspondiente
             $new->save();
+
+            //cargar todas las citas para hoy
+            $citas = $this->Cita->get_where_equals(array(
+                'fecha'  => $new->fecha,
+                'doctor' => $_SESSION['doctor']
+            ));
+            //entrar todos los turnos para las citas de la fecha de hoy
+            foreach($citas as $c) {
+                $turno = new Fila_turno();
+                $turno->usuario_movil = $c->usuario_movil;
+                $turno->telefono = $c->telefono;
+                $turno->fila = $new->cod_fila;
+                $turno->hora_llegada = $c->hora_programada;
+                $turno->cita = $c->cod_cita;
+
+                $turno->save();
+            }
         }
     }
 

@@ -65,7 +65,7 @@ class MY_Model extends CI_Model {
     public function delete() {
         $this->db->delete($this::DB_TABLE, array(
            $this::DB_TABLE_PK => $this->{$this::DB_TABLE_PK},
-        ));
+       ));
         unset($this->{$this::DB_TABLE_PK});
     }
 
@@ -103,5 +103,20 @@ class MY_Model extends CI_Model {
             $ret_val[$row->{$this::DB_TABLE_PK}] = $model;
         }
         return $ret_val;
+    }
+
+    public function get_where_equals($column_target_array){
+        $res = array();
+
+        $query = $this->db->get_where($this::DB_TABLE, $column_target_array);
+
+        $class = get_class($this);
+        foreach ($query->result() as $row) {
+            $model = new $class;
+            $model->populate($row);
+            $res[$row->{$this::DB_TABLE_PK}] = $model;
+        }
+
+        return $res;
     }
 }

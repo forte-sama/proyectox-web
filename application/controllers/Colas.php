@@ -37,6 +37,7 @@ class Colas extends CI_Controller {
 				$nueva_cita->usuario_movil = $usuario->cod_usuario_movil;
 				$nueva_cita->doctor = $_SESSION['doctor'];
 				$nueva_cita->fecha = $this->input->post('fecha');
+				$nueva_cita->telefono = $this->input->post('telefono');
 				$nueva_cita->hora_programada = $this->input->post('hora_programada');
 				$nueva_cita->estado_cita = 1;
 				$nueva_cita->cliente_presente = false;

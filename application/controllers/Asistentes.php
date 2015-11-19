@@ -32,81 +32,81 @@ class Asistentes extends CI_Controller {
 
             //revalidar datos formulario
             $this->form_validation->set_rules(array(
-               array(
-                   'field' => 'username',
-                   'label' => 'Nombre de usuario',
-                   'rules' => array('required','alpha_numeric','regex_match[/[a-z].*/]','is_unique[usuario.username]'),
+                array(
+                    'field' => 'username',
+                    'label' => 'Nombre de usuario',
+                    'rules' => array('required','alpha_numeric','regex_match[/[a-z].*/]','is_unique[usuario.username]'),
                     'errors' => array(
-                            'required'      => 'Debes incluir un %s.',
-                            'alpha_numeric' => 'tu %s incluye algo mas que solo letras y numeros.',
-                            'regex_match'   => 'Tu nombre de usuario debe iniciar con una letra.',
-                            'is_unique'     => '%s ya esta en uso!',
+                        'required'      => 'Debes incluir un %s.',
+                        'alpha_numeric' => 'tu %s incluye algo mas que solo letras y numeros.',
+                        'regex_match'   => 'Tu nombre de usuario debe iniciar con una letra.',
+                        'is_unique'     => '%s ya esta en uso!',
                     ),
-               ),
-               array(
-                   'field' => 'password',
-                   'label' => 'Contraseña',
-                   'rules' => array('required','alpha_numeric'),
+                ),
+                array(
+                    'field' => 'password',
+                    'label' => 'Contraseña',
+                    'rules' => array('required','alpha_numeric'),
                     'errors' => array(
-                            'required'      => 'Debes incluir un %s.',
-                            'alpha_numeric' => '%s incluye algo mas que solo letras y numeros.',
+                        'required'      => 'Debes incluir un %s.',
+                        'alpha_numeric' => '%s incluye algo mas que solo letras y numeros.',
                     ),
-               ),
-               array(
-                   'field' => 'telefono',
-                   'label' => 'Telefono',
-                   'rules' => array('required','regex_match[/(8[024]9-)(\d{3}-)\d{4}/]','is_unique[usuario.telefono]'),
+                ),
+                array(
+                    'field' => 'telefono',
+                    'label' => 'Telefono',
+                    'rules' => array('required','regex_match[/(8[024]9-)(\d{3}-)\d{4}/]','is_unique[usuario.telefono]'),
                     'errors' => array(
-                            'required'    => 'Debes incluir un %s.',
-                            'regex_match' => 'Este %s no parece ser un telefono valido para Rep. Dom.',
-                            'is_unique'   => 'Este %s ya esta en uso.'
+                        'required'    => 'Debes incluir un %s.',
+                        'regex_match' => 'Este %s no parece ser un telefono valido para Rep. Dom.',
+                        'is_unique'   => 'Este %s ya esta en uso.'
                     ),
-               ),
-               array(
-                   'field' => 'email',
-                   'label' => 'Correo Electronico',
-                   'rules' => 'required|valid_email|is_unique[usuario.email]',
+                ),
+                array(
+                    'field' => 'email',
+                    'label' => 'Correo Electronico',
+                    'rules' => 'required|valid_email|is_unique[usuario.email]',
                     'errors' => array(
-                            'required'    => 'Debes incluir un %s.',
-                            'valid_email' => 'El %s no tiene un formato valido.',
-                            'is_unique'   => 'El email ya esta en uso!'
+                        'required'    => 'Debes incluir un %s.',
+                        'valid_email' => 'El %s no tiene un formato valido.',
+                        'is_unique'   => 'El email ya esta en uso!'
                     ),
-               ),
-               array(
-                   'field' => 'nombre',
-                   'label' => 'Nombre',
-                   'rules' => array('required','regex_match[/([a-z]|[A-Z])+(([a-z]|[A-Z])|\ )*/]'),
+                ),
+                array(
+                    'field' => 'nombre',
+                    'label' => 'Nombre',
+                    'rules' => array('required','regex_match[/([a-z]|[A-Z])+(([a-z]|[A-Z])|\ )*/]'),
                     'errors' => array(
-                            'required'    => 'Debes incluir por lo menos un %s.',
-                            'regex_match' => 'Un %s no deberia incluir simbolos raros o numeros',
+                        'required'    => 'Debes incluir por lo menos un %s.',
+                        'regex_match' => 'Un %s no deberia incluir simbolos raros o numeros',
                     ),
-               ),
-               array(
-                   'field' => 'apellido',
-                   'label' => 'Apellido',
-                   'rules' => array('required','regex_match[/([a-z]|[A-Z])+(([a-z]|[A-Z])|\ )*/]'),
+                ),
+                array(
+                    'field' => 'apellido',
+                    'label' => 'Apellido',
+                    'rules' => array('required','regex_match[/([a-z]|[A-Z])+(([a-z]|[A-Z])|\ )*/]'),
                     'errors' => array(
-                            'required'    => 'Debes incluir por lo menos un %s.',
-                            'regex_match' => 'Un %s no deberia incluir simbolos raros o numeros',
+                        'required'    => 'Debes incluir por lo menos un %s.',
+                        'regex_match' => 'Un %s no deberia incluir simbolos raros o numeros',
                     ),
-               ),
-               array(
-                   'field' => 'sexo',
-                   'label' => 'Sexo',
-                   'rules' => 'required|in_list[M,F]',
+                ),
+                array(
+                    'field' => 'sexo',
+                    'label' => 'Sexo',
+                    'rules' => 'required|in_list[M,F]',
                     'errors' => array(
-                            'required' => 'Seguro que no tienes %s.',
-                            'in_list'  => 'Estas seguro que ese es tu %s',
+                        'required' => 'Seguro que no tienes %s.',
+                        'in_list'  => 'Estas seguro que ese es tu %s',
                     ),
-               ),
-               array(
-                   'field' => 'fecha_nacimiento',
-                   'label' => 'Fecha de Nacimiento',
-                   'rules' => 'required',
+                ),
+                array(
+                    'field' => 'fecha_nacimiento',
+                    'label' => 'Fecha de Nacimiento',
+                    'rules' => 'required',
                     'errors' => array(
-                            'required' => 'Debiste haber nacido algun dia, por favor incluye una %s.',
+                        'required' => 'Debiste haber nacido algun dia, por favor incluye una %s.',
                     ),
-               ),
+                ),
             ));
 
             //EXITO : Las validaciones pasaron
@@ -117,7 +117,7 @@ class Asistentes extends CI_Controller {
                 $form_success_data = array();
                 $form_success_data['message_type'] = "alert-success";
                 $form_success_data['message']      =  'Felicidades! Has podido registrarte, ahora puedes '
-                                                     . anchor(base_url("site/login"),'Iniciar sesion','class="btn btn-success"');
+                . anchor(base_url("site/login"),'Iniciar sesion','class="btn btn-success"');
 
                 $data['form_success'] = $this->load->view('template/form_success',$form_success_data,TRUE);
             }
@@ -134,7 +134,7 @@ class Asistentes extends CI_Controller {
         $doctores = $this->Doctor->get();
 
         //Si no hay doctores, no se pueden registrar asistentes
-        if(empty($doctores)){
+        if(count($doctores) <= 1){
             $this->load->view('no_medico',$data);
         }
         //Si hay doctores, se puede seguir con registro de asistentes

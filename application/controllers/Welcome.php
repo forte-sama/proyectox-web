@@ -51,4 +51,9 @@ class Welcome extends CI_Controller {
 		$this->load->view('blank');
 		$this->load->view('footer');
 	}
+	
+	public function calvo() {
+	    $number = mt_rand(100000, 999999);
+	    echo json_encode(array('number'=>$number));
+	}
 }

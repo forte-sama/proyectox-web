@@ -34,7 +34,7 @@ $(function () {
 //Inicializando datepicker en formulario de creacion de cita (fecha)
 $(function () {
     $("#creacion_cita_hora").datetimepicker({
-        format: "LT"
+        format: "LT",
     });
 });
 
