@@ -1,6 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+
 class Api extends CI_Controller {
     public function request_registro(){
 
@@ -22,6 +23,25 @@ class Api extends CI_Controller {
 
 
           $nuevo_usuario->save();
+    }
+
+
+    public function request_login(){
+      $input_data = json_decode(trim(file_get_contents('php://input')),true);
+      $this->load->model("Usuario_movil");
+      $nuevo_usuario= new Usuario_movil();
+      $nuevo_usuario->load_by("username",$input_data['username']);
+      $msg = new Mensaje_Respuesta();
+      if (!isset($nuevo_usuario->username)){
+        $msg->set_error(1);
+      }
+      elseif($nuevo_usuario->password == $input_data['password']){
+        $msg->set_error(0);
+      }
+      else{
+        $msg->set_error(1);
+      }
+      echo json_encode($msg);
     }
 
     public function request_edicion(){
@@ -64,6 +84,27 @@ class Api extends CI_Controller {
             $nuevo_usuario->tipo_sangre=$data['tipo_sangre'];
             //$nuevo_usuario->save();
 
+    }
+
+}
+
+Class Mensaje_Respuesta{
+
+    function __construct($cod_error="",$mensaje=""){
+      $this->cod_error = $cod_error;
+      $this->mensaje = $mensaje;
+    }
+    function set_error($code){
+      switch ($code) {
+    case 0:
+        $this->cod_error = 0;
+        $this->mensaje = "Exito.";
+        break;
+    case 1:
+        $this->cod_error = 1;
+        $this->mensaje = "Usuario o contraseña incorrecta.";
+        break;
+}
     }
 
 }
