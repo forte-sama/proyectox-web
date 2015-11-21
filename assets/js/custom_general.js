@@ -16,33 +16,18 @@
 ///OUR CODE (TEAM-ISC) #Sii
 /*========================================================*/
 
-//Iniciando
-
+//Iniciando Componentes de JavaScript
+$(function () {
 // Inicializando jqBootstrapValidation
-$(function () {
     $("input,select,textarea").not("[type=submit]").jqBootstrapValidation();
-});
-
 // Inicializando datepicker de formulario de registro de asistente y doctor
-$(function () {
-    $("#datepicker_doctor,#datepicker_asistente").datetimepicker({
-        format: "ll",
-        maxDate: new moment().format()
-    });
-});
-
-//Inicializando datepicker en formulario de creacion de cita (fecha)
-$(function () {
     $("#creacion_cita_hora").datetimepicker({
         format: "LT",
     });
-});
-
-//Inicializando datepicker en formulario de creacion de cita (hora)
-$(function () {
-    $("#creacion_cita_fecha").datetimepicker({
+//Inicializando datepicker en formulario de creacion de cita (fecha)
+    $("#datepicker_doctor,#datepicker_asistente,#creacion_cita_fecha").datetimepicker({
         format: "ll",
-        minDate: new moment().format()
+        maxDate: new moment().format()
     });
 });
 

@@ -13,3 +13,7 @@
 </div>
 
 <?= $template_footer; ?>
+
+<!-- SCRIPTS ESPECIFICOS PARA ESTA VISTA -->
+</body>
+</html>

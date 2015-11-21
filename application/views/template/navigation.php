@@ -7,7 +7,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="/Welcome/">Binary admin</a>
+        <a class="navbar-brand" href="<?= base_url(); ?>">ProyectoX</a>
     </div>
     <div style="color: white;
     padding: 15px 50px 5px 50px;
@@ -19,5 +19,8 @@
 
 <!-- /. NAV TOP  -->
 <nav class="navbar-default navbar-side" role="navigation">
-    menu (coming soon)
+    <div class="sidebar-collapse">
+        <ul class="nav">
+        </ul>
+    </div>
 </nav>

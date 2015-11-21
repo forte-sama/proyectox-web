@@ -17,7 +17,4 @@
 <!-- jqBootstrapValidation SCRIPTS -->
 <script src="/assets/js/jqBootstrapValidation.js"></script>
 <!-- CUSTOM SCRIPTS -->
-<script src="/assets/js/custom.js"></script>
-
-</body>
-</html>
+<script src="/assets/js/custom_general.js"></script>

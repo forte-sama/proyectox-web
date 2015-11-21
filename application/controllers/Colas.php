@@ -3,6 +3,56 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Colas extends CI_Controller {
 
+	public function citas_en_fecha() {
+		session_start();
+		//load dependencies
+		$this->load->library('table');
+		$this->load->model(array('Cita','Doctor','Usuario_movil'));
+
+		//declaring later used variables
+		$data = array();
+		//default value of the response
+		$estado = 'fallo';
+		//buscar citas para la fecha, solo si ya se ha iniciado una sesion que involucre un doctor(su asistente o el mismo doctor)
+		if(isset($_SESSION['doctor'])){
+			//set response values
+			$data['estado'] = 'exito';
+
+			//obtener citas del doctor de la sesion y la fecha seleccionada
+			$citas = array();
+			$citas_raw = $this->Cita->get_where_equals(array(
+				'fecha'  => $this->input->post('fecha'),
+				'doctor' => $_SESSION['doctor']
+			));
+			//building display arrangement for the html table
+			foreach ($citas_raw as $c) {
+
+				$usuario = new Usuario_movil();
+				$usuario->load($c->usuario_movil);
+
+				$citas[] = array(
+					$c->fecha,
+					$c->display_hour(),
+					$usuario->nombre . " " . $usuario->apellido,
+				);
+			}
+
+			//set html table template
+	        $this->table->set_heading('Fecha', 'Hora', 'Paciente');
+	        $this->table->set_template(array(
+	            'table_open'  => '<table class="table table-hover">',
+	            'thead_open'  => '<thead>',
+	            'thead_close' => '</thead>',
+	        ));
+	        $data['resultado'] = $this->table->generate($citas);
+		}
+		else{
+			$data['resultado'] = 'No hay sesion activa';
+		}
+
+		echo json_encode($data);
+	}
+
 	public function crear_cita() {
 		session_start();
 		if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'asistente'){
@@ -90,22 +140,6 @@ class Colas extends CI_Controller {
 
 	}
 
-	private function validar_cita($cita){
-		$citas_misma_fecha_doctor = $cita->get(0,0,FALSE);
-
-		foreach ($citas_misma_fecha_doctor as $c){
-			if ($this->resta_absoluta_horas($c->hora_programada,$cita->hora_programada)==0){
-				return FALSE;
-			}
-		}
-		return TRUE;
-	}
-
-	public function resta_absoluta_horas($hora2,$hora1){
-		$timestamp2 = strtotime($hora2)-strtotime($hora1);
-		return abs($timestamp2/3600);
-	}
-
 	public function crear_turno() {
 		session_start();
 
@@ -190,11 +224,46 @@ class Colas extends CI_Controller {
 		$this->load->view('creacion_turno',$data);
 	}
 
+	public function fechas_con_citas() {
+		session_start();
+
+		//declaring later used variables
+		$data = array();
+		//default value of the response
+		$estado = 'fallo';
+		//buscar citas para el doctor, solo si ya se ha iniciado una sesion que lo involucre (su asistente o el mismo doctor)
+		if(isset($_SESSION['doctor'])){
+			//set response values
+			$data['estado'] = 'exito';
+
+			//building sql statement to query all appointments
+			$sql = "SELECT DISTINCT fecha "
+				 . "FROM cita "
+				 . "WHERE doctor=" . $_SESSION['doctor'] . ";";
+
+			//obtener fechas
+			$query = $this->db->query($sql);
+			$res = array();
+			foreach($query->result() as $row) { $res[] = $row->fecha; }
+			$data['resultado'] = $res;
+		}
+		else{
+			$data['resultado'] = 'No hay sesion activa';
+		}
+
+		echo json_encode($data);
+	}
+
 	private function obtener_codigo_fila($user_code) {
 		$fila = new Fila();
 		$fila->load_by('asistente',$user_code);
 
 		return $fila->cod_fila;
+	}
+
+	public function resta_absoluta_horas($hora2,$hora1){
+		$timestamp2 = strtotime($hora2)-strtotime($hora1);
+		return abs($timestamp2/3600);
 	}
 
 	private function usuario_unico_en_fila($fila,$telefono) {
@@ -205,5 +274,69 @@ class Colas extends CI_Controller {
 
 		if($turnos->num_rows() > 0) return FALSE;
 		else return TRUE;
+	}
+
+	private function validar_cita($cita){
+		$citas_misma_fecha_doctor = $cita->get(0,0,FALSE);
+
+		foreach ($citas_misma_fecha_doctor as $c){
+			if ($this->resta_absoluta_horas($c->hora_programada,$cita->hora_programada)==0){
+				return FALSE;
+			}
+		}
+		return TRUE;
+	}
+
+	public function ver_cita() {
+		session_start();
+
+		if(!isset($_SESSION['username'])) {
+			redirect(base_url('site/login/'), 'refresh');
+		}
+
+		//load dependencies
+		$this->load->library('calendar');
+
+		$data = array();
+		$data['ajax_doctor']      = $_SESSION['doctor'];
+		$data['template_header']     = $this->load->view('template/header','',TRUE);
+		$data['template_navigation'] = $this->load->view('template/navigation','',TRUE);
+		$data['template_footer']     = $this->load->view('template/footer','',TRUE);
+		$this->load->view('ver_cita', $data);
+	}
+
+	public function ver_fila() {
+		session_start();
+
+		if(!isset($_SESSION['username'])) {
+			redirect(base_url('site/login/'), 'refresh');
+		}
+
+		//load dependencies
+		$this->load->library('table');
+		$this->load->model(array('Fila','Fila_turno'));
+
+		$data = array();
+		$ar_turnos = array();
+
+		//cargar todos los turnos de la fila relacionada con la sesion
+		$turnos = $this->Fila_turno->get_doctor_list();
+		foreach($turnos as $t) {
+			$ar_turnos[] = array(
+				$t->usuario_movil,
+				$t->telefono,
+				$t->fila,
+				$t->hora_llegada,
+				$t->cita,
+			);
+		}
+		$data['turnos'] = $ar_turnos;
+
+		$this->load->view('template/header');
+		$this->load->view('template/navigation');
+
+		$this->load->view('listado_fila', $data);
+
+		$this->load->view('template/footer');
 	}
 }

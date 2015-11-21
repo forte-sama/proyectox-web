@@ -64,8 +64,13 @@
 
 <?= $template_footer; ?>
 
+<!-- SCRIPTS ESPECIFICOS PARA ESTA VISTA -->
+
 <script type="text/javascript">
 $('#logini').modal({
-  backdrop: 'static'
+    backdrop: 'static'
 })
 </script>
+
+</body>
+</html>
