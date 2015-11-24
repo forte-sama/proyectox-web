@@ -12,7 +12,7 @@ class Fila_turno extends MY_Model {
     public $hora_llegada;
     public $cita;
 
-    public function get_doctor_list() {
+    public function get_list_session_doctor() {
         //load dependencies
         $this->load->Model('Cita');
 
@@ -21,7 +21,7 @@ class Fila_turno extends MY_Model {
         //obtener todos los turnos
         $turnos = $this->get();
 
-        //filtrar turnos que no son del doctor relacionado con la sesion actual
+        //filtrar solo turnos que son del doctor relacionado con la sesion actual
         foreach($turnos as $t) {
             //cargar una cita para ver si el turno corresponde a doctor de la sesion actual
             $c = new Cita();

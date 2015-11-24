@@ -4,7 +4,7 @@
 <div class="col-md-4 col-md-offset-4">
 <div class="well well-lg">
 <div class="row"> -->
-<div class="modal fade" id="logini" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade" id="login_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -65,12 +65,7 @@
 <?= $template_footer; ?>
 
 <!-- SCRIPTS ESPECIFICOS PARA ESTA VISTA -->
-
-<script type="text/javascript">
-$('#logini').modal({
-    backdrop: 'static'
-})
-</script>
+<script src="/assets/js/custom_login.js"></script>
 
 </body>
 </html>

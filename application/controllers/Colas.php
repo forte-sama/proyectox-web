@@ -261,7 +261,7 @@ class Colas extends CI_Controller {
 		return $fila->cod_fila;
 	}
 
-	public function resta_absoluta_horas($hora2,$hora1){
+	private function resta_absoluta_horas($hora2,$hora1){
 		$timestamp2 = strtotime($hora2)-strtotime($hora1);
 		return abs($timestamp2/3600);
 	}
@@ -314,29 +314,33 @@ class Colas extends CI_Controller {
 
 		//load dependencies
 		$this->load->library('table');
-		$this->load->model(array('Fila','Fila_turno'));
+		$this->load->model(array('Fila','Fila_turno','Usuario_movil','Cita'));
 
 		$data = array();
 		$ar_turnos = array();
 
 		//cargar todos los turnos de la fila relacionada con la sesion
-		$turnos = $this->Fila_turno->get_doctor_list();
+		$turnos = $this->Fila_turno->get_list_session_doctor();
 		foreach($turnos as $t) {
+			$user = new Usuario_movil();
+			$user->load($t->usuario_movil);
+
+			$cita = new Cita();
+			$cita->load($t->cita);
+
 			$ar_turnos[] = array(
-				$t->usuario_movil,
+				$user->nombre . " " . $user->apellido,
 				$t->telefono,
-				$t->fila,
 				$t->hora_llegada,
 				$t->cita,
 			);
 		}
 		$data['turnos'] = $ar_turnos;
 
-		$this->load->view('template/header');
-		$this->load->view('template/navigation');
+		$data['template_header']     = $this->load->view('template/header','',TRUE);
+		$data['template_navigation'] = $this->load->view('template/navigation','',TRUE);
+		$data['template_footer']     = $this->load->view('template/footer','',TRUE);
 
 		$this->load->view('listado_fila', $data);
-
-		$this->load->view('template/footer');
 	}
 }

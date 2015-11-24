@@ -1,9 +1,12 @@
 
+<?= $template_header; ?>
+<?= $template_navigation; ?>
+
 <!-- /. NAV SIDE  -->
 <div id="page-wrapper" >
     <div id="page-inner">
         <?php
-        $this->table->set_heading('#1', '#2', '#3', '#4', '#5');
+        $this->table->set_heading('Paciente', 'Telefono / Cedula', 'Hora llegada', 'Opciones cita (En desarrollo)');
         $this->table->set_template(array(
             'table_open'  => '<table class="table table-hover">',
             'thead_open'  => '<thead>',
@@ -13,3 +16,8 @@
         ?>
     </div>
 </div>
+
+<?= $template_footer; ?>
+
+</body>
+</html>
