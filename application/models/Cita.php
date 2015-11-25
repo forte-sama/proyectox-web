@@ -28,6 +28,24 @@ class Cita extends MY_Model {
         }
     }
 
+    public function get_citas_fecha_doctor($fecha='', $doctor='') {
+        $res = array();
+
+        $query = $this->db->get_where($this::DB_TABLE, array(
+            'fecha'  => $fecha,
+            'doctor' => $doctor
+        ));
+
+        $class = get_class($this);
+        foreach ($query->result() as $row) {
+            $model = new $class;
+            $model->populate($row);
+            $res[$row->{$this::DB_TABLE_PK}] = $model;
+        }
+
+        return $res;
+    }
+
     public function display_hour() {
         $ar = explode(":",$this->hora_programada);
 

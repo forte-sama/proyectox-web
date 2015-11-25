@@ -131,10 +131,10 @@ class Asistentes extends CI_Controller {
         $data['template_footer']      = $this->load->view('template/footer','',TRUE);
 
         $this->load->model('Doctor');
-        $doctores = $this->Doctor->get();
+        $doctores = $this->Doctor->get_where_equals(array('username !=' => 'anonimo'));
 
         //Si no hay doctores, no se pueden registrar asistentes
-        if(count($doctores) <= 1){
+        if(count($doctores) <= 0){
             $this->load->view('no_medico',$data);
         }
         //Si hay doctores, se puede seguir con registro de asistentes

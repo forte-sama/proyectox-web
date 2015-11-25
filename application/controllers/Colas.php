@@ -3,6 +3,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Colas extends CI_Controller {
 
+	public function pr () {
+		session_start();
+
+		$this->load->model(array('Cita','Doctor','Usuario_movil'));
+		$citas_raw = $this->Cita->get_citas_fecha_doctor('Nov 25, 2015',$_SESSION['doctor']);
+
+		var_dump($citas_raw);
+	}
+
 	public function citas_en_fecha() {
 		session_start();
 		//load dependencies
@@ -20,10 +29,9 @@ class Colas extends CI_Controller {
 
 			//obtener citas del doctor de la sesion y la fecha seleccionada
 			$citas = array();
-			$citas_raw = $this->Cita->get_where_equals(array(
-				'fecha'  => $this->input->post('fecha'),
-				'doctor' => $_SESSION['doctor']
-			));
+			$citas_raw = $this->Cita->get_citas_fecha_doctor($this->input->post('target_date'),$_SESSION['doctor']);
+			// $citas_raw = array();
+			
 			//building display arrangement for the html table
 			foreach ($citas_raw as $c) {
 

@@ -25,6 +25,7 @@ class Site extends CI_Controller {
                 'fecha'  => $new->fecha,
                 'doctor' => $_SESSION['doctor']
             ));
+            
             //entrar todos los turnos para las citas de la fecha de hoy
             foreach($citas as $c) {
                 $turno = new Fila_turno();

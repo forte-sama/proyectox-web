@@ -12,7 +12,7 @@
                             <span class="fa fa-calendar"></span>
                         </span>
                         <span class="hidden" id="doc"><?= $ajax_doctor; ?></span>
-                        <input id="target_fecha_value" name="fecha_nacimiento" type='text' class="form-control" onkeydown="return false" required/>
+                        <input id="target_fecha_value" name="fecha" type='text' class="form-control" onkeydown="return false"/>
                     </div>
                 </div>
             </div>
@@ -22,7 +22,7 @@
                 <div class="thumbnail" id="lista_citas">
                     <h1>Lista de citas</h1>
                     <p>Para empezar a ver las citas en el calendario, presiona el buscador arriba</p>
-                    <p><a class="btn btn-success btn-lg" href="#" role="button">Agregar Nueva Cita</a></p>
+                    <p><a class="btn btn-success btn-lg" href="<?= base_url('colas/crear_cita/'); ?>" role="button">Agregar Nueva Cita</a></p>
                 </div>
             </div>
         </div>

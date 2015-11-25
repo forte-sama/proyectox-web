@@ -1,1 +1,0 @@
-Este branch es para probar la migracion que se hara desde OpenShift a Heroku, debido a repentinos problemas de conexion (Error 500 en algunos metodos del controlador registro, error 404 en otros controladores, etc) pero en los entornos locales, tanto en Windows como Linux (Ubuntu) estos errores nunca ocurren
