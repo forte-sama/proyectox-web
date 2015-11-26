@@ -21,9 +21,6 @@
                     </div>
                     <div class="panel-body">
                         <div class="row">
-                            <ul>
-                                <?= validation_errors(); ?>
-                            </ul>
                             <?= $form_success;?>
                         </div>
                         <div class="row">
@@ -31,39 +28,58 @@
                                 <input type="hidden" name="form" value="true">
                                 <div class="col-md-6 col-md-offset-3">
                                     <div class="control-group">
-                                        <label class="control-label">Telefono de Paciente</label>
+                                        <label class="control-label">Nombre del paciente</label>
                                         <div class="controls">
                                             <input type="text"
                                             class="form-control"
-                                            name="telefono"
-                                            placeholder="809-555-8888"
-                                            maxlength="40"
-                                            pattern="(8[024]9-)(\d{3}-)\d{4}"
-                                            data-validation-pattern-message="Numero de telefono no valido para Rep. Dom."
+                                            name="nombre"
+                                            value="<?= set_value("nombre"); ?>"
+                                            placeholder="Juan Perez"
+                                            maxlength="80"
+                                            pattern="([a-z]|[A-Z])+(([a-z]|[A-Z])|\ )*"
+                                            data-validation-pattern-message="Solo letras y espacio entre nombres"
                                             required
                                             />
                                             <p class="help-block"></p>
                                         </div>
                                     </div>
-                                    <label class="control-label">Fecha Programada</label>
                                     <div class="control-group">
-                                        <div class='input-group date' id='creacion_cita_fecha'>
-                                            <span class="input-group-addon">
-                                                <span class="fa fa-calendar"></span>
-                                            </span>
-                                            <input name="fecha" type='text' class="form-control" onkeydown="return false" required/>
+                                        <label class="control-label">Telefono / Documento de identidad</label>
+                                        <div class="controls">
+                                            <input type="text"
+                                            class="form-control"
+                                            name="identificador"
+                                            value="<?= set_value("identificador"); ?>"
+                                            placeholder="809-555-8888 / 402-2284587-3"
+                                            maxlength="20"
+                                            required
+                                            />
+                                            <p class="help-block"></p>
                                         </div>
                                     </div>
-                                    <label class="control-label">Hora</label>
                                     <div class="control-group">
-                                        <div class='input-group date' id='creacion_cita_hora'>
-                                            <span class="input-group-addon">
-                                                <span class="fa fa-calendar"></span>
-                                            </span>
-                                            <input name="hora_programada" type='text' class="form-control" onkeydown="return false" required/>
+                                        <label class="control-label">Fecha Programada</label>
+                                        <div class="controls">
+                                            <div class='input-group date' id='creacion_cita_fecha'>
+                                                <span class="input-group-addon">
+                                                    <span class="fa fa-calendar"></span>
+                                                </span>
+                                                <input name="fecha" type='text' class="form-control" onkeydown="return false" required/>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-4 col-md-offset-4">
+                                    <div class="control-group">
+                                        <label class="control-label">Hora</label>
+                                        <div class="controls">
+                                            <div class='input-group date' id='creacion_cita_hora'>
+                                                <span class="input-group-addon">
+                                                    <span class="fa fa-calendar"></span>
+                                                </span>
+                                                <input name="hora_programada" type='text' class="form-control" onkeydown="return false" required/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-md-offset-3">
                                         <br>
                                         <button type="submit" class="btn btn-danger btn-block">Programar Cita</button>
                                     </div>

@@ -8,6 +8,9 @@ class Usuario_movil extends MY_Model {
     public $username;
     public $password;
     public $telefono;
+    //--------------
+    public $cedula;
+    //--------------
     public $email;
     public $nombre;
     public $apellido;
@@ -15,4 +18,8 @@ class Usuario_movil extends MY_Model {
     public $fecha_nacimiento;
     public $cod_usuario_movil;
     public $tipo_sangre;
+
+    public function display_name() {
+        return $this->nombre . " " . $this->apellido;
+    }
 }

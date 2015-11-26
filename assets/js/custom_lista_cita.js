@@ -16,22 +16,8 @@ function cambiar_citas_fecha() {
     $("#lista_citas").html($("#animacion").html());
 
     setTimeout(function () {
-        //obtener citas para fecha seleccionada
-        // $.ajax({
-        //     url: '../colas/citas_en_fecha/',
-        //     type: 'post',
-        //     data: {
-        //         target_date : target_date
-        //     },
-        //     success: exito_obtener_citas,
-        //     error: error_citas
-        // });
-        $.post("../colas/citas_en_fecha",
-        {
-            target_date: target
-        },
-        exito_obtener_citas
-        );
+        $.post("../colas/citas_en_fecha", { target_date: target })
+         .done(exito_obtener_citas);
     }, 2000);
 }
 

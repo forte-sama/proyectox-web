@@ -21,13 +21,18 @@ $(function () {
 // Inicializando jqBootstrapValidation
     $("input,select,textarea").not("[type=submit]").jqBootstrapValidation();
 // Inicializando datepicker de formulario de registro de asistente y doctor
-    $("#creacion_cita_hora").datetimepicker({
-        format: "LT",
-    });
-//Inicializando datepicker en formulario de creacion de cita (fecha)
-    $("#datepicker_doctor,#datepicker_asistente,#creacion_cita_fecha").datetimepicker({
+    $("#datepicker_doctor,#datepicker_asistente").datetimepicker({
         format: "ll",
         maxDate: new moment().format()
+    });
+//Inicializando datepickers en formulario de creacion de cita (fecha)
+    $("#creacion_cita_fecha").datetimepicker({
+        format : 'll',
+        minDate: new moment().format()
+    });
+    $("#creacion_cita_hora").datetimepicker({
+        format:  "h a",
+        minDate: new moment().format()
     });
 });
 

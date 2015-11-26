@@ -13,7 +13,7 @@
     padding: 15px 50px 5px 50px;
     float: right;
     font-size: 16px;">
-    Last access : 30 May 2014 &nbsp; <a href="#" class="btn btn-danger square-btn-adjust">Logout</a>
+    Last access : May 30, 2014 &nbsp; <a href="#" class="btn btn-danger square-btn-adjust">Logout</a>
     </div>
 </nav>
 

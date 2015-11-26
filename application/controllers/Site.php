@@ -25,15 +25,16 @@ class Site extends CI_Controller {
                 'fecha'  => $new->fecha,
                 'doctor' => $_SESSION['doctor']
             ));
-            
+
             //entrar todos los turnos para las citas de la fecha de hoy
             foreach($citas as $c) {
                 $turno = new Fila_turno();
                 $turno->usuario_movil = $c->usuario_movil;
-                $turno->telefono = $c->telefono;
-                $turno->fila = $new->cod_fila;
-                $turno->hora_llegada = $c->hora_programada;
-                $turno->cita = $c->cod_cita;
+                $turno->nombre        = $c->nombre;
+                $turno->identificador = $c->identificador;
+                $turno->fila          = $new->cod_fila;
+                $turno->hora_llegada  = $c->hora_programada;
+                $turno->cita          = $c->cod_cita;
 
                 $turno->save();
             }
@@ -121,6 +122,11 @@ class Site extends CI_Controller {
 
             //EXITO : Las validaciones pasaron
             if($this->form_validation->run() && ($type = $this->valid_user($login_name, $password)) !== 'nada'){
+                //por si acaso se encuentra en esta pagina y en otro tab ya se ha iniciado sesion, no sobreescribir sesion activa y redireccionar
+                if(isset($_SESSION['username'])) {
+                    redirect(base_url('site/index/'), 'refresh');
+                }
+
                 //iniciar sesion
                 $this->set_session_values($login_name, $type);
                 //redireccionar a site/index

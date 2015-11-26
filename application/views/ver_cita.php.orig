@@ -22,7 +22,11 @@
                 <div class="thumbnail" id="lista_citas">
                     <h1>Lista de citas</h1>
                     <p>Para empezar a ver las citas en el calendario, presiona el buscador arriba</p>
+<<<<<<< HEAD
+                    <p><a class="btn btn-success btn-lg" href="<?= base_url('colas/crear_cita/'); ?>" role="button">Agregar Nueva Cita</a></p>
+=======
                     <p>Si no quieres ver las citas en el calendario puedes <a class="btn btn-success btn-md" href="<?= base_url('colas/crear_cita/'); ?>" role="button">Agregar Nueva Cita</a></p>
+>>>>>>> FIX: Mostrar citas en calendario correctamente
                 </div>
             </div>
         </div>

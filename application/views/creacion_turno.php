@@ -6,7 +6,7 @@
     <div id="page-inner">
       <div class="row">
           <div class="col-md-12">
-              <h2>Programación de Cita</h2>
+              <h2>Ingreso de Nuevo Paciente</h2>
               <h5>Por favor llene los campos a continuación.</h5>
           </div>
       </div>
@@ -31,23 +31,38 @@
                                 <input type="hidden" name="form" value="true">
                                 <div class="col-md-6 col-md-offset-3">
                                     <div class="control-group">
-                                        <label class="control-label">Telefono</label>
+                                        <label class="control-label">Nombre del paciente</label>
                                         <div class="controls">
                                             <input type="text"
                                             class="form-control"
-                                            name="telefono"
-                                            placeholder="809-555-8888"
-                                            maxlength="40"
-                                            pattern="(8[024]9-)(\d{3}-)\d{4}"
-                                            data-validation-pattern-message="Numero de telefono no valido para Rep. Dom."
+                                            name="nombre"
+                                            value="<?= set_value("nombre"); ?>"
+                                            placeholder="Juan Perez"
+                                            maxlength="80"
+                                            pattern="([a-z]|[A-Z])+(([a-z]|[A-Z])|\ )*"
+                                            data-validation-pattern-message="Solo letras y espacio entre nombres"
                                             required
                                             />
                                             <p class="help-block"></p>
                                         </div>
                                     </div>
-                                    <div class="col-md-4 col-md-offset-4">
+                                    <div class="control-group">
+                                        <label class="control-label">Telefono / Documento de identidad</label>
+                                        <div class="controls">
+                                            <input type="text"
+                                            class="form-control"
+                                            name="identificador"
+                                            value="<?= set_value("identificador"); ?>"
+                                            placeholder="809-555-8888 / 402-2284587-3"
+                                            maxlength="20"
+                                            required
+                                            />
+                                            <p class="help-block"></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-md-offset-3">
                                         <br>
-                                        <button type="submit" class="btn btn-danger btn-block">Programar Cita</button>
+                                        <button type="submit" class="btn btn-danger btn-block">Entrar a la cola</button>
                                     </div>
                                 </div>
                             </form>
