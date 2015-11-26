@@ -1,0 +1,22 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Welcome extends CI_Controller {
+<<<<<<< HEAD
+=======
+
+>>>>>>> FIX: Mostrar citas en calendario correctamente
+	public function index() {
+		$data = array();
+
+		$data['template_header'] = $this->load->view('template/header','',TRUE);
+		$data['template_footer'] = $this->load->view('template/footer','',TRUE);
+
+<<<<<<< HEAD
+		$this->load->view('inicio',$data);
+=======
+	public function ui() {
+		$this->load->view('examples/ui');
+>>>>>>> FIX: Mostrar citas en calendario correctamente
+	}
+}

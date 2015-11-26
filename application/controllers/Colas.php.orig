@@ -153,13 +153,41 @@ class Colas extends CI_Controller {
 			}
 
 			//vistas anidadas
-			$data['template_header']		= $this->load->view('template/header','',TRUE);
-			$data['template_navigation'] 	= $this->load->view('template/navigation','',TRUE);
-			$data['template_footer']		= $this->load->view('template/footer','',TRUE);
+			$data['template_header']     = $this->load->view('template/header','',TRUE);
+			$data['template_footer']     = $this->load->view('template/footer','',TRUE);
+			$data['template_navigation'] = $this->nav_usuario();
 
 			$this->load->view('creacion_cita',$data);
 		}
+	}
 
+	private function nav_usuario() {
+		$user_options = '';
+
+		switch($_SESSION['user_type']){
+			case "asistente":
+				$user_options = $this->load->view('template/navigation_asistente','',TRUE);
+				break;
+			case "doctor":
+				$user_options = $this->load->view('template/navigation_doctor','',TRUE);
+				break;
+		}
+
+		$data = array(
+			'user_options' => $user_options,
+		);
+
+		return $this->load->view('template/navigation',$data,TRUE);
+	}
+
+	public function identificador_valido($campo) {
+		$coincide_telefono  = (preg_match("/^(8[024]9)-\d{3}-\d{4}$/", $campo, $matches) == 1);
+		$coincide_cedula    = (preg_match("/^\d{3}-\d{7}-\d$/", $campo, $matches) == 1);
+
+		if ($coincide_telefono || $coincide_cedula)
+			return TRUE;
+
+		return FALSE;
 	}
 
 	public function identificador_valido($campo) {
@@ -196,6 +224,7 @@ class Colas extends CI_Controller {
 					'field' => 'identificador',
 					'label' => 'Documento de identificacion',
 					'rules' => array('required','callback_identificador_valido'),
+<<<<<<< HEAD
 					'errors' => array(
 						'required'    => 'Debes incluir un %s.',
 						'identificador_valido' => 'El %s provisto no tiene el formato valido, favor revisarlo',
@@ -206,6 +235,18 @@ class Colas extends CI_Controller {
 					'label' => 'Nombre',
 					'rules' => array('required','regex_match[/([a-z]|[A-Z])+(([a-z]|[A-Z])|\ )*/]'),
 					'errors' => array(
+=======
+					'errors' => array(
+						'required'    => 'Debes incluir un %s.',
+						'identificador_valido' => 'El %s provisto no tiene el formato valido, favor revisarlo',
+					),
+				),
+				array(
+					'field' => 'nombre',
+					'label' => 'Nombre',
+					'rules' => array('required','regex_match[/([a-z]|[A-Z])+(([a-z]|[A-Z])|\ )*/]'),
+					'errors' => array(
+>>>>>>> FIX: Mostrar citas en calendario correctamente
 						'required'    => 'Debes incluir por lo menos un %s.',
 						'regex_match' => 'Un %s no deberia incluir simbolos raros o numeros',
 					),
@@ -263,8 +304,8 @@ class Colas extends CI_Controller {
 
 		//vistas anidadas
 		$data['template_header']     = $this->load->view('template/header','',TRUE);
-		$data['template_navigation'] = $this->load->view('template/navigation','',TRUE);
 		$data['template_footer']     = $this->load->view('template/footer','',TRUE);
+		$data['template_navigation'] = $this->nav_usuario();
 
 		$this->load->view('creacion_turno',$data);
 	}
@@ -345,8 +386,9 @@ class Colas extends CI_Controller {
 		$data = array();
 		$data['ajax_doctor']      = $_SESSION['doctor'];
 		$data['template_header']     = $this->load->view('template/header','',TRUE);
-		$data['template_navigation'] = $this->load->view('template/navigation','',TRUE);
 		$data['template_footer']     = $this->load->view('template/footer','',TRUE);
+		$data['template_navigation'] = $this->nav_usuario();
+
 		$this->load->view('ver_cita', $data);
 	}
 
@@ -361,8 +403,13 @@ class Colas extends CI_Controller {
 
 		$data['turnos']				 = $this->mostrar_fila();
 		$data['template_header']     = $this->load->view('template/header','',TRUE);
+<<<<<<< HEAD
+		$data['template_footer']     = $this->load->view('template/footer','',TRUE);
+		$data['template_navigation'] = $this->nav_usuario();
+=======
 		$data['template_navigation'] = $this->load->view('template/navigation','',TRUE);
 		$data['template_footer']     = $this->load->view('template/footer','',TRUE);
+>>>>>>> FIX: Mostrar citas en calendario correctamente
 
 		$this->load->view('ver_fila', $data);
 	}
@@ -437,6 +484,7 @@ class Colas extends CI_Controller {
 			'thead_open'  => '<thead>',
 			'thead_close' => '</thead>',
 		));
+<<<<<<< HEAD
 
 		return $this->table->generate($ar_turnos);
 	}
@@ -465,6 +513,36 @@ class Colas extends CI_Controller {
 			else
 				$cita->cliente_presente = 'f';
 
+=======
+
+		return $this->table->generate($ar_turnos);
+	}
+
+	public function cambio_estado_turno_cita() {
+		session_start();
+
+		$data = array('estado' => 'fallido');
+
+		if(!isset($_SESSION['username'])) {
+			$data['resultado'] = 'No hay sesion activa';
+		}
+		else{
+			//load dependencies
+			$this->load->model(array('Fila','Fila_turno','Cita'));
+
+			//intentar cambiar estado de cita en turno
+			$turno = new Fila_turno();
+			$turno->load($this->input->post('numero_turno'));
+
+			$cita = new Cita();
+			$cita->load($turno->cita);
+
+			if($cita->cliente_presente == 'f')
+				$cita->cliente_presente = 't';
+			else
+				$cita->cliente_presente = 'f';
+
+>>>>>>> FIX: Mostrar citas en calendario correctamente
 			$cita->save();
 
 			//exito
