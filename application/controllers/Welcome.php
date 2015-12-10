@@ -2,32 +2,12 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Welcome extends CI_Controller {
-
 	public function index() {
-		$this->load->view('examples/index');
-	}
+		$data = array();
 
-	public function blank() {
-		$this->load->view('examples/blank');
-	}
+		$data['template_header'] = $this->load->view('template/header','',TRUE);
+		$data['template_footer'] = $this->load->view('template/footer','',TRUE);
 
-	public function chart() {
-		$this->load->view('examples/chart');
-	}
-
-	public function form() {
-		$this->load->view('examples/form');
-	}
-
-	public function tab_panel() {
-		$this->load->view('examples/tab-panel');
-	}
-
-	public function table() {
-		$this->load->view('examples/table');
-	}
-
-	public function ui() {
-		$this->load->view('examples/ui');
+		$this->load->view('inicio',$data);
 	}
 }
