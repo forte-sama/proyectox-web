@@ -153,13 +153,31 @@ class Colas extends CI_Controller {
 			}
 
 			//vistas anidadas
-			$data['template_header']		= $this->load->view('template/header','',TRUE);
-			$data['template_navigation'] 	= $this->load->view('template/navigation','',TRUE);
-			$data['template_footer']		= $this->load->view('template/footer','',TRUE);
+			$data['template_header']     = $this->load->view('template/header','',TRUE);
+			$data['template_footer']     = $this->load->view('template/footer','',TRUE);
+			$data['template_navigation'] = $this->nav_usuario();
 
 			$this->load->view('creacion_cita',$data);
 		}
+	}
 
+	private function nav_usuario() {
+		$user_options = '';
+
+		switch($_SESSION['user_type']){
+			case "asistente":
+				$user_options = $this->load->view('template/navigation_asistente','',TRUE);
+				break;
+			case "doctor":
+				$user_options = $this->load->view('template/navigation_doctor','',TRUE);
+				break;
+		}
+
+		$data = array(
+			'user_options' => $user_options,
+		);
+
+		return $this->load->view('template/navigation',$data,TRUE);
 	}
 
 	public function identificador_valido($campo) {
@@ -263,8 +281,8 @@ class Colas extends CI_Controller {
 
 		//vistas anidadas
 		$data['template_header']     = $this->load->view('template/header','',TRUE);
-		$data['template_navigation'] = $this->load->view('template/navigation','',TRUE);
 		$data['template_footer']     = $this->load->view('template/footer','',TRUE);
+		$data['template_navigation'] = $this->nav_usuario();
 
 		$this->load->view('creacion_turno',$data);
 	}
@@ -345,8 +363,9 @@ class Colas extends CI_Controller {
 		$data = array();
 		$data['ajax_doctor']      = $_SESSION['doctor'];
 		$data['template_header']     = $this->load->view('template/header','',TRUE);
-		$data['template_navigation'] = $this->load->view('template/navigation','',TRUE);
 		$data['template_footer']     = $this->load->view('template/footer','',TRUE);
+		$data['template_navigation'] = $this->nav_usuario();
+
 		$this->load->view('ver_cita', $data);
 	}
 
@@ -361,8 +380,8 @@ class Colas extends CI_Controller {
 
 		$data['turnos']				 = $this->mostrar_fila();
 		$data['template_header']     = $this->load->view('template/header','',TRUE);
-		$data['template_navigation'] = $this->load->view('template/navigation','',TRUE);
 		$data['template_footer']     = $this->load->view('template/footer','',TRUE);
+		$data['template_navigation'] = $this->nav_usuario();
 
 		$this->load->view('ver_fila', $data);
 	}

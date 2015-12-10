@@ -14,9 +14,8 @@ class Registro extends CI_Controller {
         $data = array();
 
         //vistas anidadas
-        $data['template_header']      = $this->load->view('template/header','',TRUE);
-        $data['template_navigation']  = $this->load->view('template/navigation','',TRUE);
-        $data['template_footer']      = $this->load->view('template/footer','',TRUE);
+        $data['template_header'] = $this->load->view('template/header','',TRUE);
+        $data['template_footer'] = $this->load->view('template/footer','',TRUE);
 
         $this->load->view('registro_general',$data);
     }
@@ -145,14 +144,13 @@ class Registro extends CI_Controller {
 
         //vistas anidadas
         $data['template_header']      = $this->load->view('template/header','',TRUE);
-        $data['template_navigation']  = $this->load->view('template/navigation','',TRUE);
         $data['template_footer']      = $this->load->view('template/footer','',TRUE);
 
         $this->load->model('Doctor');
         $doctores = $this->Doctor->get_where_equals(array('username !=' => 'anonimo'));
 
         //Si no hay doctores, no se pueden registrar asistentes
-        if(count($doctores) <= 0){
+        if(count($doctores) <= 2){
             $this->load->view('no_medico',$data);
         }
         //Si hay doctores, se puede seguir con registro de asistentes
@@ -295,7 +293,6 @@ class Registro extends CI_Controller {
 
         //vistas anidadas
 		$data['template_header']      = $this->load->view('template/header','',TRUE);
-		$data['template_navigation']  = $this->load->view('template/navigation','',TRUE);
 		$data['template_footer']      = $this->load->view('template/footer','',TRUE);
 
 
