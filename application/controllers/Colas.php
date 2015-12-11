@@ -3,6 +3,40 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Colas extends CI_Controller {
 
+	public function cambio_estado_turno_cita() {
+		session_start();
+
+		$data = array('estado' => 'fallido');
+
+		if(!isset($_SESSION['username'])) {
+			$data['resultado'] = 'No hay sesion activa';
+		}
+		else{
+			//load dependencies
+			$this->load->model(array('Fila','Fila_turno','Cita'));
+
+			//intentar cambiar estado de cita en turno
+			$turno = new Fila_turno();
+			$turno->load($this->input->post('numero_turno'));
+
+			$cita = new Cita();
+			$cita->load($turno->cita);
+
+			if($cita->cliente_presente == 'f')
+				$cita->cliente_presente = 't';
+			else
+				$cita->cliente_presente = 'f';
+
+			$cita->save();
+
+			//exito
+			$data['estado'] = 'exito';
+			$data['resultado'] = $this->mostrar_fila();//fn
+		}
+
+		echo json_encode($data);
+	}
+
 	public function citas_en_fecha() {
 		session_start();
 		//load dependencies
@@ -21,7 +55,6 @@ class Colas extends CI_Controller {
 			//obtener citas del doctor de la sesion y la fecha seleccionada
 			$citas = array();
 			$citas_raw = $this->Cita->get_citas_fecha_doctor($this->input->post('target_date'),$_SESSION['doctor']);
-			// $citas_raw = array();
 
 			//building display arrangement for the html table
 			foreach ($citas_raw as $c) {
@@ -161,28 +194,9 @@ class Colas extends CI_Controller {
 		}
 	}
 
-	private function nav_usuario() {
-		$user_options = '';
-
-		switch($_SESSION['user_type']){
-			case "asistente":
-				$user_options = $this->load->view('template/navigation_asistente','',TRUE);
-				break;
-			case "doctor":
-				$user_options = $this->load->view('template/navigation_doctor','',TRUE);
-				break;
-		}
-
-		$data = array(
-			'user_options' => $user_options,
-		);
-
-		return $this->load->view('template/navigation',$data,TRUE);
-	}
-
 	public function identificador_valido($campo) {
-		$coincide_telefono  = (preg_match("/^(8[024]9)-\d{3}-\d{4}$/", $campo, $matches) == 1);
-		$coincide_cedula    = (preg_match("/^\d{3}-\d{7}-\d$/", $campo, $matches) == 1);
+		$coincide_telefono = (preg_match("/^(8[024]9)-\d{3}-\d{4}$/", $campo, $matches) == 1);
+		$coincide_cedula   = (preg_match("/^\d{3}-\d{7}-\d$/", $campo, $matches) == 1);
 
 		if ($coincide_telefono || $coincide_cedula)
 			return TRUE;
@@ -317,6 +331,102 @@ class Colas extends CI_Controller {
 		echo json_encode($data);
 	}
 
+	private function mostrar_fila() {
+		//load dependencies
+		$this->load->library('table');
+		$this->load->helper(array('date','form'));
+		$this->load->model(array('Fila','Fila_turno','Usuario_movil','Cita'));
+
+		$data = array();
+		$ar_turnos = array();
+
+		//cargar todos los turnos de la fila relacionada con la sesion
+		$turnos = $this->Fila_turno->get_list_session_doctor();
+		foreach($turnos as $t) {
+			$user = new Usuario_movil();
+			$user->load($t->usuario_movil);
+
+			$fila = new Fila();
+			$fila->load($t->fila);
+
+			//solo seguir procesando turno para mostrarlo si es un turno que correspnde a fila de asistente o medico actual
+			if($fila->asistente == $_SESSION['user_code']){
+
+				$cita = new Cita();
+				$cita->load($t->cita);
+				$cliente_presente_class = '';
+				$cliente_presente_msg   = '';
+
+				//postgreSQL t -> true : f -> false
+				if($cita->cliente_presente == 't') {
+					$cliente_presente_class = 'btn btn-default btn-sm disabled';
+					$cliente_presente_msg   = 'Paciente llego';
+				}
+				else {
+					$cliente_presente_class = 'cambio_estado btn btn-primary btn-sm';
+					$cliente_presente_msg   = 'Llego el paciente?';
+				}
+
+				//opciones de cada turno
+				$opciones = array();
+				//Si es una cita anonima (turno normal del fila) no hay que actualizar estado
+				if($t->cita == 1) {
+					$opciones['boton'] = "<span class=\"badge\">Turno normal</span>";
+				}
+				else {
+					$opciones['boton'] = form_button(
+						'',
+						$cliente_presente_msg,
+						array(
+							'num_turno' => $t->cod_fila_turno,
+							'class' => $cliente_presente_class,
+							'title' => 'Hacer click para indicar que paciente correspondiente ha llegado',
+						)
+					);
+				}
+
+
+				$display_name = ($user->nombre == 'anonimo' ? $t->nombre : $user->display_name());
+
+				//Agregar row que se mostrara en lista de turnos
+				$ar_turnos[] = array(
+					$display_name,
+					$t->identificador,
+					$t->mostrar_hora(),
+					$this->load->view('opciones_turno',$opciones,TRUE),
+				);
+			}
+		}
+
+		$this->table->set_heading('Paciente', 'Telefono / Cedula', 'Hora llegada', 'Opciones cita (En desarrollo)');
+		$this->table->set_template(array(
+			'table_open'  => '<table class="table table-hover">',
+			'thead_open'  => '<thead>',
+			'thead_close' => '</thead>',
+		));
+
+		return $this->table->generate($ar_turnos);
+	}
+
+	private function nav_usuario() {
+		$user_options = '';
+
+		switch($_SESSION['user_type']){
+			case "asistente":
+				$user_options = $this->load->view('template/navigation_asistente','',TRUE);
+				break;
+			case "doctor":
+				$user_options = $this->load->view('template/navigation_doctor','',TRUE);
+				break;
+		}
+
+		$data = array(
+			'user_options' => $user_options,
+		);
+
+		return $this->load->view('template/navigation',$data,TRUE);
+	}
+
 	private function obtener_codigo_fila($user_code) {
 		$fila = new Fila();
 		$fila->load_by('asistente',$user_code);
@@ -384,113 +494,5 @@ class Colas extends CI_Controller {
 		$data['template_navigation'] = $this->nav_usuario();
 
 		$this->load->view('ver_fila', $data);
-	}
-
-	private function mostrar_fila() {
-		//load dependencies
-		$this->load->library('table');
-		$this->load->helper(array('date','form'));
-		$this->load->model(array('Fila','Fila_turno','Usuario_movil','Cita'));
-
-		$data = array();
-		$ar_turnos = array();
-
-		//cargar todos los turnos de la fila relacionada con la sesion
-		$turnos = $this->Fila_turno->get_list_session_doctor();
-		foreach($turnos as $t) {
-			$user = new Usuario_movil();
-			$user->load($t->usuario_movil);
-
-			$fila = new Fila();
-			$fila->load($t->fila);
-
-			//solo seguir procesando turno para mostrarlo si es un turno que correspnde a fila de asistente o medico actual
-			if($fila->asistente == $_SESSION['user_code']){
-
-				$cita = new Cita();
-				$cita->load($t->cita);
-				$cliente_presente_class = '';
-				$cliente_presente_msg   = '';
-
-				//postgreSQL t -> true : f -> false
-				if($cita->cliente_presente == 't') {
-					$cliente_presente_class = 'btn btn-default btn-sm disabled';
-					$cliente_presente_msg   = 'Cliente presente';
-				}
-				else{
-					$cliente_presente_class = 'cambio_estado btn btn-primary btn-sm';
-					$cliente_presente_msg   = 'Llego el paciente?';
-				}
-
-				$opciones_cita = form_button(
-					'',
-					$cliente_presente_msg,
-					array(
-						'num_turno' => $t->cod_fila_turno,
-						'class' => $cliente_presente_class,
-						'title' => 'Hacer click para indicar que paciente correspondiente ha llegado',
-					)
-				);
-
-
-				//Si es una cita anonima (turno normal del fila) no hay que actualizar estado
-				if($t->cita == 1) {
-					$opciones_cita = "<span class=\"badge\">Turno normal</span>";
-				}
-
-				$display_name = ($user->nombre == 'anonimo' ? $t->nombre : $user->display_name());
-
-				//Agregar row que se mostrara en lista de turnos
-				$ar_turnos[] = array(
-					$display_name,
-					$t->identificador,
-					$t->mostrar_hora(),
-					$opciones_cita,
-				);
-			}
-		}
-
-		$this->table->set_heading('Paciente', 'Telefono / Cedula', 'Hora llegada', 'Opciones cita (En desarrollo)');
-		$this->table->set_template(array(
-			'table_open'  => '<table class="table table-hover">',
-			'thead_open'  => '<thead>',
-			'thead_close' => '</thead>',
-		));
-
-		return $this->table->generate($ar_turnos);
-	}
-
-	public function cambio_estado_turno_cita() {
-		session_start();
-
-		$data = array('estado' => 'fallido');
-
-		if(!isset($_SESSION['username'])) {
-			$data['resultado'] = 'No hay sesion activa';
-		}
-		else{
-			//load dependencies
-			$this->load->model(array('Fila','Fila_turno','Cita'));
-
-			//intentar cambiar estado de cita en turno
-			$turno = new Fila_turno();
-			$turno->load($this->input->post('numero_turno'));
-
-			$cita = new Cita();
-			$cita->load($turno->cita);
-
-			if($cita->cliente_presente == 'f')
-				$cita->cliente_presente = 't';
-			else
-				$cita->cliente_presente = 'f';
-
-			$cita->save();
-
-			//exito
-			$data['estado'] = 'exito';
-			$data['resultado'] = $this->mostrar_fila();//fn
-		}
-
-		echo json_encode($data);
 	}
 }

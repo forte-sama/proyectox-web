@@ -1,5 +1,9 @@
 //Iniciando Componentes de JavaScript
 $(function () {
+    attach_event();
+});
+
+function attach_event() {
     $("button.cambio_estado").click(function (e) {
         e.preventDefault();
 
@@ -16,12 +20,13 @@ $(function () {
     $("a.badge").click(function (e) {
         e.preventDefault();
     });
-});
+}
 
 function exito_cambio_estado(data) {
     var respuesta = $.parseJSON(data);
 
     if(respuesta.estado == 'exito') {
         $("#lista_turnos").html(respuesta.resultado);
+        attach_event();
     }
 }
