@@ -130,6 +130,8 @@ class Colas extends CI_Controller {
 				$nueva_cita->nombre 		  = $this->input->post('nombre');
 				$nueva_cita->identificador 	  = $this->input->post('identificador');
 				$nueva_cita->cliente_presente = false;
+				$nueva_cita->estado_cita	  = 1;
+
 				//formatear hora para formato de postgreSQL
 				$hora_raw = $this->input->post('hora_programada');
 				$hora_new = date("g:i a",strtotime($hora_raw));

@@ -11,11 +11,9 @@ class Cita extends MY_Model {
     public $cliente_presente;
     public $doctor;
     public $usuario_movil;
-    // public $telefono;
-    //------------------
     public $nombre;
     public $identificador;
-    //------------------
+    public $estado_cita;
 
     public function get($limit=0,$offset=0,$parent_get=TRUE){
         if ($parent_get){
