@@ -13,7 +13,6 @@ class Registro extends CI_Controller {
         //declare later used variables
         $data = array();
 
-        
         //vistas anidadas
         $data['template_header'] = $this->load->view('template/header','',TRUE);
         $data['template_footer'] = $this->load->view('template/footer','',TRUE);

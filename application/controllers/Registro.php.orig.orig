@@ -2,9 +2,6 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Registro extends CI_Controller {
-<<<<<<< HEAD
-    
-=======
 
     public function index() {
         session_start();
@@ -16,6 +13,10 @@ class Registro extends CI_Controller {
         //declare later used variables
         $data = array();
 
+<<<<<<< HEAD
+        
+=======
+>>>>>>> c9f1d0d... T#97 Menu para usuarios registrados
         //vistas anidadas
         $data['template_header'] = $this->load->view('template/header','',TRUE);
         $data['template_footer'] = $this->load->view('template/footer','',TRUE);
@@ -23,7 +24,6 @@ class Registro extends CI_Controller {
         $this->load->view('registro_general',$data);
     }
 
->>>>>>> 718dead... T#97 Menu para usuarios registrados
     public function asistente() {
         $this->load->helper('form');
         $data = array('form_success' => '');
