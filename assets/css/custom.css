@@ -56,3 +56,7 @@ img.header_image_full_horizontal {
 .app_badge{
     width: 40%;
 }
+
+#btn_salir_consulta {
+    height: 100%;
+}

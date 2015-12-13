@@ -150,7 +150,7 @@ class Registro extends CI_Controller {
         $doctores = $this->Doctor->get_where_equals(array('username !=' => 'anonimo'));
 
         //Si no hay doctores, no se pueden registrar asistentes
-        if(count($doctores) <= 2){
+        if(count($doctores) <= 0){
             $this->load->view('no_medico',$data);
         }
         //Si hay doctores, se puede seguir con registro de asistentes

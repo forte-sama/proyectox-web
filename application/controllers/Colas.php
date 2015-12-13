@@ -6,12 +6,12 @@ class Colas extends CI_Controller {
 	public function cambio_estado_turno_cita() {
 		session_start();
 
-		$data = array('estado' => 'fallido');
+		$data = array('estado' => 'fallo');
 
 		if(!isset($_SESSION['username'])) {
 			$data['resultado'] = 'No hay sesion activa';
 		}
-		else{
+		else {
 			//load dependencies
 			$this->load->model(array('Fila','Fila_turno','Cita'));
 
@@ -31,7 +31,7 @@ class Colas extends CI_Controller {
 
 			//exito
 			$data['estado'] = 'exito';
-			$data['resultado'] = $this->mostrar_fila();//fn
+			$data['resultado'] = $this->mostrar_fila()['fila'];//fn
 		}
 
 		echo json_encode($data);
@@ -274,19 +274,19 @@ class Colas extends CI_Controller {
 				$turno->fila          = $cod_fila;
 				$turno->hora_llegada  = mdate($formato, now());
 				$turno->cita          = 1; //cita dummy (ninguna)
+				$turno->estado_turno  = 1; // 1 : estado_turno espera
 
 				if($this->usuario_unico_en_fila($turno->fila, $turno->identificador)){
 					$turno->save();
 
 					//incluir msg de exito
 	                $form_success_data['message_type'] = "alert-success";
-	                $form_success_data['message'] =  'Paciente ingresado exitosamente.';
-
+	                $form_success_data['message']      =  'Paciente ingresado exitosamente.';
 				}
 				else{
 					$form_success_data['message_type'] = "alert-danger";
-	                $form_success_data['message'] =  'Ya un paciente con esta identidad ha ingresado a la cola '
-													. anchor(base_url("colas/ver_fila"),'Ver cola','class="btn btn-warning"');
+	                $form_success_data['message']      =  'Ya un paciente con esta identidad ha ingresado a la cola '
+													   . anchor(base_url("colas/ver_fila"),'Ver cola','class="btn btn-warning"');
 				}
 
                 $data['form_success'] = $this->load->view('template/form_success',$form_success_data,TRUE);
@@ -301,6 +301,37 @@ class Colas extends CI_Controller {
 		$data['template_navigation'] = $this->nav_usuario();
 
 		$this->load->view('creacion_turno',$data);
+	}
+
+	public function entrada_consulta() {
+		session_start();
+
+		if($this->input->post('numero_turno')){
+			//load dependencies
+			$this->load->model(array('Fila_turno','Consulta','Asistente','Fila'));
+
+			//declare later used variables
+			//array de respuesta
+			$data = array();
+			//turno a ingresar
+			$turno = new Fila_turno();
+			$turno->load($this->input->post('numero_turno'));
+
+			//intento de cambiar estado de turno a ingresado
+			if($turno->iniciar_consulta() == TRUE) {
+				$data['estado'] = 'exito';
+			}
+			else{
+				$data['estado'] = 'fallo';
+			}
+
+			$turnos = $this->mostrar_fila();
+
+			$data['resultado_turno_actual'] = $this->turno_actual($turnos);
+			$data['resultado_fila']         = $turnos['fila'];
+
+			echo json_encode($data);
+		}
 	}
 
 	public function fechas_con_citas() {
@@ -324,6 +355,7 @@ class Colas extends CI_Controller {
 			$query = $this->db->query($sql);
 			$res = array();
 			foreach($query->result() as $row) { $res[] = $row->fecha; }
+
 			$data['resultado'] = $res;
 		}
 		else{
@@ -371,22 +403,44 @@ class Colas extends CI_Controller {
 
 				//opciones de cada turno
 				$opciones = array();
+				//BOTON DE CAMBIAR ESTADO DE CITA EN TURNO
 				//Si es una cita anonima (turno normal del fila) no hay que actualizar estado
 				if($t->cita == 1) {
-					$opciones['boton'] = "<span class=\"badge\">Turno normal</span>";
+					$opciones['btn_estado_turno'] = '<span class="badge"><i class="fa fa-list"></i> Turno normal</span>';
 				}
 				else {
-					$opciones['boton'] = form_button(
+					$opciones['btn_estado_turno'] = form_button(
 						'',
 						$cliente_presente_msg,
 						array(
 							'num_turno' => $t->cod_fila_turno,
-							'class' => $cliente_presente_class,
-							'title' => 'Hacer click para indicar que paciente correspondiente ha llegado',
+							'class'     => $cliente_presente_class,
+							'title'     => 'Hacer click para indicar que paciente correspondiente ha llegado',
 						)
 					);
 				}
 
+				//BOTON DE SACAR TURNO DE LA FILA
+				$opciones['btn_entrada_consulta'] = form_button(
+					'',
+					'<i class="fa fa-share"></i> Iniciar consulta',
+					array(
+						'num_turno' => $t->cod_fila_turno,
+						'class'     => 'btn btn-primary btn-block btn_entrada_consulta',
+						'title'     => 'Hacer click para sacar paciente de la fila',
+					)
+				);
+
+				//BOTON DE SACAR TURNO DE LA FILA
+				$opciones['btn_salida_fila'] = form_button(
+					'',
+					'<i class="fa fa-sign-out"></i>',
+					array(
+						'num_turno' => $t->cod_fila_turno,
+						'class'     => 'btn btn-warning btn-block btn_salida_fila',
+						'title'     => 'Hacer click para sacar paciente de la fila'
+					)
+				);
 
 				$display_name = ($user->nombre == 'anonimo' ? $t->nombre : $user->display_name());
 
@@ -400,14 +454,39 @@ class Colas extends CI_Controller {
 			}
 		}
 
-		$this->table->set_heading('Paciente', 'Telefono / Cedula', 'Hora llegada', 'Opciones cita (En desarrollo)');
+		$this->table->set_heading('Paciente', 'Telefono / Cedula', 'Hora llegada', 'Opciones de Turnos');
 		$this->table->set_template(array(
 			'table_open'  => '<table class="table table-hover">',
 			'thead_open'  => '<thead>',
 			'thead_close' => '</thead>',
 		));
 
-		return $this->table->generate($ar_turnos);
+		$resultado = array();
+		$resultado['fila'] = $this->table->generate($ar_turnos);
+
+		//turno actual
+		$t_actual = $this->Fila_turno->turno_actual();
+
+		if(isset($t_actual->cod_fila_turno)){
+			//usuario del turno actual
+			$u_actual = new Usuario_movil();
+			$u_actual->load($t_actual->usuario_movil);
+			//informacion necesaria por partes del turno actual
+			$resultado['turno_actual'] = array(
+				'display_info' => array(
+					'nombre'        => ($u_actual->nombre == 'anonimo' ? $t_actual->nombre : $u_actual->display_name()),
+					'identificador' => $t_actual->identificador,
+					'hora_llegada'  => $t_actual->mostrar_hora_inicio_consulta(),
+				),
+				'num_turno'    => $t_actual->cod_fila_turno,
+			);
+
+		}
+		else{
+			$resultado['turno_actual'] = array('empty');
+		}
+
+		return $resultado;
 	}
 
 	private function nav_usuario() {
@@ -441,6 +520,79 @@ class Colas extends CI_Controller {
 		return abs($timestamp2/3600);
 	}
 
+	public function salida_consulta() {
+		session_start();
+
+		if($this->input->post('numero_turno')){
+			$result = array();
+
+			//load dependencies
+			$this->load->model(array('Fila_turno','Consulta','Asistente','Fila'));
+
+			//turno que se acaba (sale del consultorio)
+			$turno = new Fila_turno();
+			$turno->load($this->input->post('numero_turno'));
+			//fila donde estaba el turno
+			$f = new Fila();
+			$f->load($turno->fila);
+			//asistente encargad@ de la fila
+			$a = new Asistente();
+			$a->load($f->asistente);
+			//consulta generada para el doctor
+			$consulta = new Consulta();
+			$consulta->doctor  = $a->doctor_cod_doctor;
+			$consulta->es_cita = ($turno->cita != 1); //si el codigo de la cita es diferente a uno es una cita real
+			$formato = "%h:%i:%a";
+			$consulta->hora_llegada = $turno->hora_entrada_consulta;
+			$consulta->hora_salida  = mdate("%h:%i:%a", now());
+			//crear nuevo tiempo de consulta
+			$consulta->save();
+			//sacar turno de la fila
+			$turno->delete();
+
+			$result = array(
+				'estado'    => 'exito',
+				'resultado' => $this->turno_actual($this->mostrar_fila()),
+			);
+
+			echo json_encode($result);
+		}
+		else{
+			echo json_encode(array(
+				'estado'    => 'fallo',
+				'resultado' => 'Este no parece ser un request legitimo'
+			));
+		}
+
+	}
+
+	public function salida_fila() {
+		session_start();
+
+		$data = array('estado' => 'fallo');
+
+		if(!isset($_SESSION['username'])) {
+			$data['resultado'] = 'No hay sesion activa';
+		}
+		else {
+			//load dependencies
+			$this->load->model(array('Fila_turno'));
+
+			//intentar cambiar estado de cita en turno
+			$turno = new Fila_turno();
+			$turno->load($this->input->post('numero_turno'));
+
+			//borrar turno especificado
+			$turno->delete();
+
+			//exito
+			$data['estado'] = 'exito';
+			$data['resultado'] = $this->mostrar_fila()['fila'];//fn
+		}
+
+		echo json_encode($data);
+	}
+
 	private function usuario_unico_en_fila($fila,$identificador) {
 		$turnos = $this->db->get_where('fila_turno',array(
 			'fila'     => $fila,
@@ -454,7 +606,6 @@ class Colas extends CI_Controller {
 	}
 
 	private function validar_cita($cita){
-
 		$citas_misma_fecha_doctor = $cita->get(0,0,FALSE);
 
 		foreach ($citas_misma_fecha_doctor as $c){
@@ -473,7 +624,7 @@ class Colas extends CI_Controller {
 		}
 
 		$data = array();
-		$data['ajax_doctor']      = $_SESSION['doctor'];
+		$data['ajax_doctor']         = $_SESSION['doctor'];
 		$data['template_header']     = $this->load->view('template/header','',TRUE);
 		$data['template_footer']     = $this->load->view('template/footer','',TRUE);
 		$data['template_navigation'] = $this->nav_usuario();
@@ -490,11 +641,20 @@ class Colas extends CI_Controller {
 
 		$data = array();
 
-		$data['turnos']				 = $this->mostrar_fila();
+		$turnos = $this->mostrar_fila();
+		$data['turnos']				 = $turnos['fila'];
 		$data['template_header']     = $this->load->view('template/header','',TRUE);
 		$data['template_footer']     = $this->load->view('template/footer','',TRUE);
 		$data['template_navigation'] = $this->nav_usuario();
+		$data['info_turno_actual']   = $this->turno_actual($turnos); //turno actual
 
 		$this->load->view('ver_fila', $data);
+	}
+
+	private function turno_actual($turnos_array) {
+		if(count($turnos_array['turno_actual']) < 2)
+			return $this->load->view('turno_actual_vacio','',TRUE);
+		else
+			return $this->load->view('turno_actual_lleno',$turnos_array,TRUE);
 	}
 }

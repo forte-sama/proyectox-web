@@ -35,6 +35,7 @@ class Site extends CI_Controller {
                 $turno->fila          = $new->cod_fila;
                 $turno->hora_llegada  = $c->hora_programada;
                 $turno->cita          = $c->cod_cita;
+                $turno->estado_turno  = 1; // 1 : estado_turno espera
 
                 $c->estado_cita = 3; // 3 : estado_cita hoy
 

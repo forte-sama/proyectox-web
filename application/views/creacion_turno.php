@@ -9,7 +9,7 @@
         </div>
         <div class="panel-body">
             <div class="row">
-                <ul>
+                <ul class="text-danger">
                     <?= validation_errors(); ?>
                 </ul>
                 <?= $form_success; ?>
