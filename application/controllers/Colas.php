@@ -209,7 +209,7 @@ class Colas extends CI_Controller {
 	public function crear_turno() {
 		session_start();
 
-		if(!isset($_SESSION['username'])) {
+		if(!isset($_SESSION['username']) || $_SESSION['user_type'] != 'asistente') {
 			redirect(base_url('site/login/'), 'refresh');
 		}
 
@@ -379,6 +379,7 @@ class Colas extends CI_Controller {
 		foreach($turnos as $t) {
 			$user = new Usuario_movil();
 			$user->load($t->usuario_movil);
+			$display_name = ($user->nombre == 'anonimo' ? $t->nombre : $user->display_name());
 
 			$fila = new Fila();
 			$fila->load($t->fila);
@@ -401,60 +402,72 @@ class Colas extends CI_Controller {
 					$cliente_presente_msg   = 'Llego el paciente?';
 				}
 
-				//opciones de cada turno
-				$opciones = array();
-				//BOTON DE CAMBIAR ESTADO DE CITA EN TURNO
-				//Si es una cita anonima (turno normal del fila) no hay que actualizar estado
-				if($t->cita == 1) {
-					$opciones['btn_estado_turno'] = '<span class="badge"><i class="fa fa-list"></i> Turno normal</span>';
-				}
-				else {
-					$opciones['btn_estado_turno'] = form_button(
+				//opciones de cada turno (solo para asistente)
+				if($_SESSION['user_type'] == 'asistente'){
+					$opciones = array();
+					//BOTON DE CAMBIAR ESTADO DE CITA EN TURNO
+					//Si es una cita anonima (turno normal del fila) no hay que actualizar estado
+					if($t->cita == 1) {
+						$opciones['btn_estado_turno'] = '<span class="badge"><i class="fa fa-list"></i> Turno normal</span>';
+					}
+					else {
+						$opciones['btn_estado_turno'] = form_button(
+							'',
+							$cliente_presente_msg,
+							array(
+								'num_turno' => $t->cod_fila_turno,
+								'class'     => $cliente_presente_class,
+								'title'     => 'Hacer click para indicar que paciente correspondiente ha llegado',
+							)
+						);
+					}
+
+					//BOTON DE SACAR TURNO DE LA FILA
+					$opciones['btn_entrada_consulta'] = form_button(
 						'',
-						$cliente_presente_msg,
+						'<i class="fa fa-share"></i> Iniciar consulta',
 						array(
 							'num_turno' => $t->cod_fila_turno,
-							'class'     => $cliente_presente_class,
-							'title'     => 'Hacer click para indicar que paciente correspondiente ha llegado',
+							'class'     => 'btn btn-primary btn-block btn_entrada_consulta',
+							'title'     => 'Hacer click para sacar paciente de la fila',
 						)
 					);
+
+					//BOTON DE SACAR TURNO DE LA FILA
+					$opciones['btn_salida_fila'] = form_button(
+						'',
+						'<i class="fa fa-sign-out"></i>',
+						array(
+							'num_turno' => $t->cod_fila_turno,
+							'class'     => 'btn btn-warning btn-block btn_salida_fila',
+							'title'     => 'Hacer click para sacar paciente de la fila'
+						)
+					);
+
+					//Agregar row que se mostrara en lista de turnos
+					$ar_turnos[] = array(
+						$display_name,
+						$t->identificador,
+						$t->mostrar_hora(),
+						$this->load->view('opciones_turno',$opciones,TRUE),
+					);
 				}
-
-				//BOTON DE SACAR TURNO DE LA FILA
-				$opciones['btn_entrada_consulta'] = form_button(
-					'',
-					'<i class="fa fa-share"></i> Iniciar consulta',
-					array(
-						'num_turno' => $t->cod_fila_turno,
-						'class'     => 'btn btn-primary btn-block btn_entrada_consulta',
-						'title'     => 'Hacer click para sacar paciente de la fila',
-					)
-				);
-
-				//BOTON DE SACAR TURNO DE LA FILA
-				$opciones['btn_salida_fila'] = form_button(
-					'',
-					'<i class="fa fa-sign-out"></i>',
-					array(
-						'num_turno' => $t->cod_fila_turno,
-						'class'     => 'btn btn-warning btn-block btn_salida_fila',
-						'title'     => 'Hacer click para sacar paciente de la fila'
-					)
-				);
-
-				$display_name = ($user->nombre == 'anonimo' ? $t->nombre : $user->display_name());
-
-				//Agregar row que se mostrara en lista de turnos
-				$ar_turnos[] = array(
-					$display_name,
-					$t->identificador,
-					$t->mostrar_hora(),
-					$this->load->view('opciones_turno',$opciones,TRUE),
-				);
+				else {
+					//Agregar row que se mostrara en lista de turnos
+					$ar_turnos[] = array(
+						$display_name,
+						$t->identificador,
+						$t->mostrar_hora(),
+					);
+				}
 			}
 		}
 
-		$this->table->set_heading('Paciente', 'Telefono / Cedula', 'Hora llegada', 'Opciones de Turnos');
+		if($_SESSION['user_type'] == 'asistente')
+			$this->table->set_heading('Paciente', 'Telefono / Cedula', 'Hora llegada', 'Opciones de Turnos');
+		else
+			$this->table->set_heading('Paciente', 'Telefono / Cedula', 'Hora llegada');
+
 		$this->table->set_template(array(
 			'table_open'  => '<table class="table table-hover">',
 			'thead_open'  => '<thead>',
