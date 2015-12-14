@@ -94,4 +94,18 @@ class Fila_turno extends MY_Model {
 
         return TRUE;
     }
+
+    public function get_turnos_usuario($usuario='') {
+        $res = array();
+        $query = $this->db->get_where($this::DB_TABLE, array(
+            'usuario_movil'  => $usuario,
+        ));
+        $class = get_class($this);
+        foreach ($query->result() as $row) {
+            $model = new $class;
+            $model->populate($row);
+            $res[$row->{$this::DB_TABLE_PK}] = $model;
+        }
+        return $res;
+    }
 }
