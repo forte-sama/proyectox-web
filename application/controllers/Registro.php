@@ -166,7 +166,7 @@ class Registro extends CI_Controller {
 
         if(!empty($this->input->post('form'))){
             //Crear nuevo Doctor a ser insertado si pasa las validaciones
-            $this->load->model('Doctor');
+            $this->load->model(array('Doctor','Consulta'));
 
             $new = new Doctor();
 
@@ -279,6 +279,20 @@ class Registro extends CI_Controller {
             //EXITO : Las validaciones pasaron
             if($this->form_validation->run()){
                 $new->save();
+
+                //crear tiempo de consulta dummy para recien creado medico
+                $consulta_new = new Consulta();
+
+                $consulta_dummy = new Consulta();
+                $consulta_dummy->load(1);
+
+                $consulta_new->hora_llegada = $consulta_dummy->hora_llegada;
+                $consulta_new->hora_salida  = $consulta_dummy->hora_salida;
+                $consulta_new->es_cita      = $consulta_dummy->es_cita;
+                $consulta_new->doctor       = $new->cod_doctor;
+    			$consulta_new->fecha        = date('M j, Y', now());
+
+                $consulta_new->save();
 
                 //incluir msg de exito
                 $form_success_data = array();

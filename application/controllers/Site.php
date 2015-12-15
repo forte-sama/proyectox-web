@@ -24,7 +24,7 @@ class Site extends CI_Controller {
             $citas = $this->Cita->get_where_equals(array(
                 'fecha'          => $new->fecha,
                 'doctor'         => $_SESSION['doctor'],
-                'estado_cita !=' => 2, 
+                'estado_cita !=' => 2,
             ));
 
             //entrar todos los turnos para las citas de la fecha de hoy
@@ -53,9 +53,9 @@ class Site extends CI_Controller {
         if(!isset($_SESSION['username'])) {
             redirect(base_url('site/login/'), 'refresh');
         }
-
-        echo "Enhorabuena! Bienvenido, " . $_SESSION['user_type'] . " " . $_SESSION['username'] . "<hr>";
-        echo '<a href="' . base_url('site/logout/') . '/">Logout</a>';
+        else {
+            redirect(base_url('colas/ver_fila/'), 'refresh');
+        }
     }
 
     public function logout() {

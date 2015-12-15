@@ -5,6 +5,7 @@ class Consulta extends MY_Model {
     const DB_LAST_ID_SEQ = 'consulta_cod_consulta_seq';
 
     public $cod_consulta;
+    public $fecha;
     public $hora_llegada;
     public $hora_salida;
     public $es_cita;

@@ -43,11 +43,13 @@ class Colas extends CI_Controller {
 		echo json_encode($data);
 	}
 
+
+
 	public function citas_en_fecha() {
 		session_start();
 		//load dependencies
 		$this->load->library('table');
-		$this->load->model(array('Cita','Doctor','Usuario_movil'));
+		$this->load->model(array('Cita','Doctor','Usuario_movil','Estado_cita'));
 
 		//declaring later used variables
 		$data = array();
@@ -67,6 +69,8 @@ class Colas extends CI_Controller {
 
 				$usuario = new Usuario_movil();
 				$usuario->load($c->usuario_movil);
+				$estado = new Estado_cita();
+				$estado->load($c->estado_cita);
 
 				$display_name = ($usuario->nombre == 'anonimo' ? $c->nombre : $usuario->display_name());
 
@@ -74,11 +78,12 @@ class Colas extends CI_Controller {
 					$c->mostrar_fecha(),
 					$c->mostrar_hora(),
 					$display_name,
+					$estado->descripcion_estado,
 				);
 			}
 
 			//set html table template
-	        $this->table->set_heading('Fecha', 'Hora', 'Paciente');
+	        $this->table->set_heading('Fecha', 'Hora', 'Paciente', 'Estado de cita');
 	        $this->table->set_template(array(
 	            'table_open'  => '<table class="table table-hover">',
 	            'thead_open'  => '<thead>',
@@ -96,6 +101,18 @@ class Colas extends CI_Controller {
 		}
 
 		echo json_encode($data);
+	}
+
+	public function ver_estadisticas() {
+		session_start();
+
+		$data = array();
+
+		$data['template_header']     = $this->load->view('template/header','',TRUE);
+		$data['template_footer']     = $this->load->view('template/footer','',TRUE);
+		$data['template_navigation'] = $this->nav_usuario();
+
+		$this->load->view('ver_estadisticas',$data);
 	}
 
 	public function crear_cita() {
@@ -312,20 +329,14 @@ class Colas extends CI_Controller {
 	}
 
 	public function xxx() {
-		session_start();
-
-        $this->load->model(array('Fila','Cita'));
-
-        $fila = new Fila();
-        $fila->load_by('asistente',$_SESSION['user_code']);
-
-        $sql = "SELECT max(num_turno) as maximo FROM fila_turno WHERE fila={$fila->cod_fila}";
-        $query = $this->db->query($sql);
-
-        if(isset($query->result()[0]->maximo))
-			echo $query->result()[0]->maximo;
-		else
-			echo 0;
+		echo json_encode(array(
+			'a' => array(1,2,3),
+			'b' => array(
+				'ba' => array('ba','bb','bc'),
+				'bb' => 1,
+			),
+			'c' => 'maneeeen'
+		));
 	}
 
 	public function entrada_consulta() {
@@ -418,6 +429,7 @@ class Colas extends CI_Controller {
 				$cita->load($t->cita);
 				$cliente_presente_class = '';
 				$cliente_presente_msg   = '';
+				$habilitado_entrada = '';
 
 				//postgreSQL t -> true : f -> false
 				if($cita->cliente_presente == 't') {
@@ -427,7 +439,10 @@ class Colas extends CI_Controller {
 				else {
 					$cliente_presente_class = 'cambio_estado btn btn-primary btn-sm';
 					$cliente_presente_msg   = 'Llego el paciente?';
+
+					$habilitado_entrada = 'disabled';
 				}
+
 
 				//opciones de cada turno (solo para asistente)
 				if($_SESSION['user_type'] == 'asistente'){
@@ -436,6 +451,7 @@ class Colas extends CI_Controller {
 					//Si es una cita anonima (turno normal del fila) no hay que actualizar estado
 					if($t->cita == 1) {
 						$opciones['btn_estado_turno'] = '<span class="badge"><i class="fa fa-list"></i> Turno normal</span>';
+						$habilitado_entrada = '';
 					}
 					else {
 						$opciones['btn_estado_turno'] = form_button(
@@ -455,7 +471,7 @@ class Colas extends CI_Controller {
 						'<i class="fa fa-share"></i> Iniciar consulta',
 						array(
 							'num_turno' => $t->cod_fila_turno,
-							'class'     => 'btn btn-primary btn-block btn_entrada_consulta',
+							'class'     => 'btn btn-primary btn-block btn_entrada_consulta ' . $habilitado_entrada,
 							'title'     => 'Hacer click para sacar paciente de la fila',
 						)
 					);
@@ -585,6 +601,7 @@ class Colas extends CI_Controller {
 			$formato = "%h:%i:%a";
 			$consulta->hora_llegada = $turno->hora_entrada_consulta;
 			$consulta->hora_salida  = mdate("%h:%i:%a", now());
+			$consulta->fecha        = date('M j, Y', now());
 			//crear nuevo tiempo de consulta
 			$consulta->save();
 			//sacar turno de la fila
