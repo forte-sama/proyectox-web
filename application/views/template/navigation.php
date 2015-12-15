@@ -15,7 +15,19 @@
         <?= $user_options; ?>
 
         <ul class="nav navbar-nav navbar-right">
-            <li><a href="<?= base_url('site/logout/'); ?>">Cerrar sesion</a></li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Jornada <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="<?= base_url('site/shutdown/'); ?>">
+                            <span  class="text-danger">
+                                <i class="fa fa-power-off fa-lg"></i> Terminar Jornada
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li><a href="<?= base_url('site/logout/'); ?>"><i class="fa fa-sign-out fa-lg"></i> Cerrar sesion</a></li>
         </ul>
     </div>
 </nav>

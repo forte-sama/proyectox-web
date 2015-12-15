@@ -56,12 +56,10 @@ class Site extends CI_Controller {
         echo '<a href="' . base_url('site/logout/') . '/">Logout</a>';
     }
 
-    private function limpiar_fila($user_code) {
-        ;
-    }
-
     public function logout() {
-        session_start();
+        if(!isset($_SESSION)) {
+            session_start();
+        }
 
         if(!isset($_SESSION['username'])) {
             redirect(base_url('site/login/'), 'refresh');
@@ -219,5 +217,45 @@ class Site extends CI_Controller {
         }
 
         return 'nada';
+    }
+
+    public function shutdown() {
+        if(!isset($_SESSION)) {
+            session_start();
+        }
+
+        if(!isset($_SESSION['username']) || $_SESSION['user_type'] != 'asistente') {
+            redirect(base_url('site/login/'), 'refresh');
+        }
+
+        //load dependencies
+        $this->load->model(array('Fila','Fila_turno','Cita','Asistente'));
+
+        $fila = new Fila();
+        $fila->load_by('asistente',$_SESSION['user_code']);
+
+        //cargar todas los turnos de esa fila
+        $turnos_fila = $this->Fila_turno->get_where_equals(array(
+            'fila' => $fila->cod_fila,
+        ));
+
+        //cancelar todas las citas de los turnos cargados
+        foreach ($turnos_fila as $t) {
+            $cita = new Cita();
+            $cita->load($t->cita);
+
+            //si es una cita real (no anonima) cerrar
+            if($cita->cod_cita != 1){
+                $cita->estado_cita = 2;
+            }
+
+            //borrar turno actual
+            $t->delete();
+        }
+
+        //borrar fila
+        $fila->delete();
+
+        $this->logout();
     }
 }
