@@ -22,8 +22,9 @@ class Site extends CI_Controller {
 
             //cargar todas las citas para hoy
             $citas = $this->Cita->get_where_equals(array(
-                'fecha'  => $new->fecha,
-                'doctor' => $_SESSION['doctor']
+                'fecha'          => $new->fecha,
+                'doctor'         => $_SESSION['doctor'],
+                'estado_cita !=' => 2, 
             ));
 
             //entrar todos los turnos para las citas de la fecha de hoy
@@ -35,7 +36,8 @@ class Site extends CI_Controller {
                 $turno->fila          = $new->cod_fila;
                 $turno->hora_llegada  = $c->hora_programada;
                 $turno->cita          = $c->cod_cita;
-                $turno->estado_turno  = 1; // 1 : estado_turno espera
+                $turno->estado_turno  = 1;  //  1 : estado_turno espera
+                $turno->num_turno     = $turno->asignar_nuevo_num_turno(''); // -1 : numero invalido porque el paciente no esta presente
 
                 $c->estado_cita = 3; // 3 : estado_cita hoy
 

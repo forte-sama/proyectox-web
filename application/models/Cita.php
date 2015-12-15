@@ -19,13 +19,16 @@ class Cita extends MY_Model {
         if ($parent_get){
             return parent::get($limit,$offset);
         }
-        else{
+        else {
             $ret_val = array();
-            $query = $this->db->get_where($this::DB_TABLE, array(
-                "fecha" => $this->fecha,
-                "doctor"=> $this->doctor
+
+            $query = $this->get_where_equals(array(
+                "fecha"          => $this->fecha,
+                "doctor"         => $this->doctor,
+                "estado_cita !=" => 2,
             ));
-            return $query->result();
+
+            return $query;
         }
     }
 

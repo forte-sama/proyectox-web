@@ -23,10 +23,14 @@ class Colas extends CI_Controller {
 				$cita = new Cita();
 				$cita->load($turno->cita);
 
-				if($cita->cliente_presente == 'f')
+				if($cita->cliente_presente == 'f') {
 					$cita->cliente_presente = 't';
-				else
+					$turno->num_turno = $this->Fila_turno->asignar_nuevo_num_turno($_SESSION['user_code']);
+					$turno->save();
+				}
+				else {
 					$cita->cliente_presente = 'f';
+				}
 
 				$cita->save();
 			}
@@ -277,6 +281,8 @@ class Colas extends CI_Controller {
 				$turno->hora_llegada  = mdate($formato, now());
 				$turno->cita          = 1; //cita dummy (ninguna)
 				$turno->estado_turno  = 1; // 1 : estado_turno espera
+				$turno->num_turno     = $this->Fila_turno->asignar_nuevo_num_turno($_SESSION['user_code']);
+				// $turno->num_turno = 2;
 
 				if($this->usuario_unico_en_fila($turno->fila, $turno->identificador)){
 					$turno->save();
@@ -303,6 +309,23 @@ class Colas extends CI_Controller {
 		$data['template_navigation'] = $this->nav_usuario();
 
 		$this->load->view('creacion_turno',$data);
+	}
+
+	public function xxx() {
+		session_start();
+
+        $this->load->model(array('Fila','Cita'));
+
+        $fila = new Fila();
+        $fila->load_by('asistente',$_SESSION['user_code']);
+
+        $sql = "SELECT max(num_turno) as maximo FROM fila_turno WHERE fila={$fila->cod_fila}";
+        $query = $this->db->query($sql);
+
+        if(isset($query->result()[0]->maximo))
+			echo $query->result()[0]->maximo;
+		else
+			echo 0;
 	}
 
 	public function entrada_consulta() {
@@ -565,7 +588,7 @@ class Colas extends CI_Controller {
 			//crear nuevo tiempo de consulta
 			$consulta->save();
 			//sacar turno de la fila
-			$turno->delete();
+			$turno->sacar_fila();
 
 			$result = array(
 				'estado'    => 'exito',
@@ -574,13 +597,12 @@ class Colas extends CI_Controller {
 
 			echo json_encode($result);
 		}
-		else{
+		else {
 			echo json_encode(array(
 				'estado'    => 'fallo',
 				'resultado' => 'Este no parece ser un request legitimo'
 			));
 		}
-
 	}
 
 	public function salida_fila() {
@@ -601,7 +623,7 @@ class Colas extends CI_Controller {
 
 			if(isset($turno->cod_fila_turno)) {
 				//borrar turno especificado
-				$turno->delete();
+				$turno->sacar_fila();
 			}
 
 			//exito

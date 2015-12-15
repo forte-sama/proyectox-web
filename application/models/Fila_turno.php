@@ -14,6 +14,50 @@ class Fila_turno extends MY_Model {
     public $cita;
     public $estado_turno;
     public $hora_entrada_consulta;
+    public $num_turno;
+
+    public function asignar_nuevo_num_turno($cod_asistente) {
+        $this->load->model(array('Fila'));
+
+        if(isset($cod_asistente) && !empty($cod_asistente)) {
+            $fila = new Fila();
+            $fila->load_by('asistente',$cod_asistente);
+
+            return $this->turnos_anteriores($fila->cod_fila) + 1;
+        }
+
+        return -1;
+    }
+
+    private function turnos_anteriores($cod_fila) {
+        $this->load->model(array('Fila','Cita'));
+
+        $fila = new Fila();
+        $fila->load($cod_fila);
+
+        $sql = "SELECT max(num_turno) as maximo FROM fila_turno WHERE fila={$cod_fila} AND num_turno != -1";
+        $query = $this->db->query($sql);
+
+        if(isset($query->result()[0]->maximo) && !empty($query->result()[0]->maximo))
+            return $query->result()[0]->maximo;
+
+        return 0;
+    }
+
+    public function cantidad_turnos_anteriores() {
+
+        $sql = "SELECT count(*) as cant
+                FROM fila_turno
+                WHERE fila = {$this->fila}
+                AND num_turno < {$this->num_turno}
+                AND estado_turno = 1";
+
+        $cantidad = $this->db->query($sql)->result()[0]->cant;
+
+        $t_actual = $this->turno_actual();
+
+        return (isset($t_actual->cod_fila_turno) ? $cantidad + 1 : $cantidad);
+    }
 
     public function turno_actual() {
         //load dependencies
@@ -97,15 +141,32 @@ class Fila_turno extends MY_Model {
 
     public function get_turnos_usuario($usuario='') {
         $res = array();
+
         $query = $this->db->get_where($this::DB_TABLE, array(
             'usuario_movil'  => $usuario,
         ));
+
         $class = get_class($this);
+
         foreach ($query->result() as $row) {
             $model = new $class;
             $model->populate($row);
             $res[$row->{$this::DB_TABLE_PK}] = $model;
         }
+
         return $res;
+    }
+
+    public function sacar_fila() {
+        if($this->cita != 1) {
+            $this->load->model('Cita');
+
+            $cita = new Cita();
+            $cita->load($this->cita);
+            $cita->estado_cita = 2;
+            $cita->save();
+        }
+
+        $this->delete();
     }
 }
