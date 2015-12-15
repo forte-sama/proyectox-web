@@ -19,15 +19,17 @@ class Colas extends CI_Controller {
 			$turno = new Fila_turno();
 			$turno->load($this->input->post('numero_turno'));
 
-			$cita = new Cita();
-			$cita->load($turno->cita);
+			if(isset($turno->cod_fila_turno)) {
+				$cita = new Cita();
+				$cita->load($turno->cita);
 
-			if($cita->cliente_presente == 'f')
-				$cita->cliente_presente = 't';
-			else
-				$cita->cliente_presente = 'f';
+				if($cita->cliente_presente == 'f')
+					$cita->cliente_presente = 't';
+				else
+					$cita->cliente_presente = 'f';
 
-			$cita->save();
+				$cita->save();
+			}
 
 			//exito
 			$data['estado'] = 'exito';
@@ -312,17 +314,19 @@ class Colas extends CI_Controller {
 
 			//declare later used variables
 			//array de respuesta
-			$data = array();
+			$data = array('estado' => 'exito');
 			//turno a ingresar
 			$turno = new Fila_turno();
 			$turno->load($this->input->post('numero_turno'));
 
-			//intento de cambiar estado de turno a ingresado
-			if($turno->iniciar_consulta() == TRUE) {
-				$data['estado'] = 'exito';
-			}
-			else{
-				$data['estado'] = 'fallo';
+			if(isset($turno->cod_fila_turno)) {
+				//intento de cambiar estado de tur no a ingresado
+				if($turno->iniciar_consulta() == TRUE) {
+					$data['estado'] = 'exito';
+				}
+				else{
+					$data['estado'] = 'fallo';
+				}
 			}
 
 			$turnos = $this->mostrar_fila();
@@ -595,8 +599,10 @@ class Colas extends CI_Controller {
 			$turno = new Fila_turno();
 			$turno->load($this->input->post('numero_turno'));
 
-			//borrar turno especificado
-			$turno->delete();
+			if(isset($turno->cod_fila_turno)) {
+				//borrar turno especificado
+				$turno->delete();
+			}
 
 			//exito
 			$data['estado'] = 'exito';

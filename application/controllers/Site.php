@@ -65,8 +65,6 @@ class Site extends CI_Controller {
             redirect(base_url('site/login/'), 'refresh');
         }
 
-        $this->limpiar_fila($_SESSION['user_code']);
-
         session_unset();
         setcookie(session_name(),'',0,'/');
 
@@ -247,6 +245,8 @@ class Site extends CI_Controller {
             //si es una cita real (no anonima) cerrar
             if($cita->cod_cita != 1){
                 $cita->estado_cita = 2;
+
+                $cita->save();
             }
 
             //borrar turno actual
