@@ -54,9 +54,14 @@ class Fila_turno extends MY_Model {
 
         $cantidad = $this->db->query($sql)->result()[0]->cant;
 
-        $t_actual = $this->turno_actual();
+        $sql2 = "SELECT count(*) as cant
+                FROM fila_turno
+                WHERE fila = {$this->fila}
+                AND estado_turno = 2";
 
-        return (isset($t_actual->cod_fila_turno) ? $cantidad + 1 : $cantidad);
+        $cant = $this->db->query($sql2)->result()[0]->cant;
+
+        return ($cant != 0 ? $cantidad + 1 : $cantidad);
     }
 
     public function turno_actual() {
@@ -89,7 +94,7 @@ class Fila_turno extends MY_Model {
 
     public function get_list_session_doctor() {
         //load dependencies
-        $this->load->Model('Cita');
+        $this->load->Model('Cita','Fila','Asistente');
 
         $respuesta = array();
 
@@ -98,16 +103,16 @@ class Fila_turno extends MY_Model {
 
         //filtrar solo turnos que son del doctor relacionado con la sesion actual
         foreach($turnos as $t) {
-            //load dependencies
-            $this->load->model(array('Fila'));
-
             //cargar fila en la que esta el turno actual para ver si el manejador de esa fila (asistente)
             $f = new Fila();
             $f->load($t->fila);
 
+            $asist = new Asistente();
+            $asist->load($f->asistente);
+
             //verificar que manejador de fila del turno actual es quien inicio sesion
             //verificar que el turno todavia sigue en espera y no es el turno que entro a consulta
-            if($f->asistente == $_SESSION['user_code'] && $t->estado_turno == 1) {
+            if(($f->asistente == $_SESSION['user_code'] || $asist->doctor_cod_doctor == $_SESSION['user_code']) && $t->estado_turno == 1) {
                 $respuesta[] = $t;
             }
         }
@@ -144,6 +149,7 @@ class Fila_turno extends MY_Model {
 
         $query = $this->db->get_where($this::DB_TABLE, array(
             'usuario_movil'  => $usuario,
+            'estado_turno !=' => 2
         ));
 
         $class = get_class($this);

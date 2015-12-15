@@ -43,7 +43,43 @@ class Colas extends CI_Controller {
 		echo json_encode($data);
 	}
 
+	public function calcular_datos_estadistica() {
+		session_start();
 
+		if(!isset($_SESSION['user_code']) || $_SESSION['user_type'] != 'doctor') {
+			redirect(base_url('site/login/'), 'refresh');
+		}
+
+		$data = array('estado' => 'fallo');
+
+		if($this->input->post('criterio')){
+			//load dependencies
+			$this->load->model(array('Consulta'));
+
+			//declare later used variables
+			$data['estado'] = 'exito';
+			$criterio = $this->input->post('criterio');
+
+			switch($criterio) {
+				case "dia":
+				//calcular todos los diferentes dias que hay con consultas
+				$data['resultado'] = $this->Consulta->estadisticas_dias($_SESSION['user_code']);
+				break;
+
+				case "mes":
+				$data['resultado'] = $this->Consulta->estadisticas_meses($_SESSION['user_code']);
+				break;
+
+				default:
+					$data['resultado'] = $this->Consulta->estadisticas_meses($_SESSION['user_code']);
+			}
+		}
+		else{
+			$data['resultado'] = 'No es una request valido.';
+		}
+
+		echo json_encode($data);
+	}
 
 	public function citas_en_fecha() {
 		session_start();
@@ -295,7 +331,7 @@ class Colas extends CI_Controller {
 				$turno->nombre		  = $this->input->post('nombre');
 				$turno->identificador = $this->input->post('identificador');
 				$turno->fila          = $cod_fila;
-				$turno->hora_llegada  = mdate($formato, now());
+				$turno->hora_llegada  = mdate($formato, now('America/Santo_Domingo'));
 				$turno->cita          = 1; //cita dummy (ninguna)
 				$turno->estado_turno  = 1; // 1 : estado_turno espera
 				$turno->num_turno     = $this->Fila_turno->asignar_nuevo_num_turno($_SESSION['user_code']);
@@ -326,17 +362,6 @@ class Colas extends CI_Controller {
 		$data['template_navigation'] = $this->nav_usuario();
 
 		$this->load->view('creacion_turno',$data);
-	}
-
-	public function xxx() {
-		echo json_encode(array(
-			'a' => array(1,2,3),
-			'b' => array(
-				'ba' => array('ba','bb','bc'),
-				'bb' => 1,
-			),
-			'c' => 'maneeeen'
-		));
 	}
 
 	public function entrada_consulta() {
@@ -407,7 +432,7 @@ class Colas extends CI_Controller {
 		//load dependencies
 		$this->load->library('table');
 		$this->load->helper(array('date','form'));
-		$this->load->model(array('Fila','Fila_turno','Usuario_movil','Cita'));
+		$this->load->model(array('Fila','Fila_turno','Usuario_movil','Cita','Asistente'));
 
 		$data = array();
 		$ar_turnos = array();
@@ -422,8 +447,11 @@ class Colas extends CI_Controller {
 			$fila = new Fila();
 			$fila->load($t->fila);
 
+			$asistente = new Asistente();
+			$asistente->load($fila->asistente);
+
 			//solo seguir procesando turno para mostrarlo si es un turno que correspnde a fila de asistente o medico actual
-			if($fila->asistente == $_SESSION['user_code']){
+			if($fila->asistente == $_SESSION['user_code'] || $asistente->doctor_cod_doctor == $_SESSION['user_code']){
 
 				$cita = new Cita();
 				$cita->load($t->cita);
@@ -600,8 +628,8 @@ class Colas extends CI_Controller {
 			$consulta->es_cita = ($turno->cita != 1); //si el codigo de la cita es diferente a uno es una cita real
 			$formato = "%h:%i:%a";
 			$consulta->hora_llegada = $turno->hora_entrada_consulta;
-			$consulta->hora_salida  = mdate("%h:%i:%a", now());
-			$consulta->fecha        = date('M j, Y', now());
+			$consulta->hora_salida  = mdate("%h:%i:%a", now('America/Santo_Domingo'));
+			$consulta->fecha        = date('M j, Y', now('America/Santo_Domingo'));
 			//crear nuevo tiempo de consulta
 			$consulta->save();
 			//sacar turno de la fila

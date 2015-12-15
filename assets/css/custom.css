@@ -1,3 +1,8 @@
+body {
+    background-image: url("/assets/img/pattern.png");
+    background-repeat: repeat;
+}
+
 .page_container {
     padding-top: 80px;
 }
@@ -32,7 +37,7 @@ SLIDER DEL HOME SCREEN
 ================*/
 
 #home_slides {
-    color: #fff;
+    color: #ffffff;
 }
 
 .header_home {

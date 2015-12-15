@@ -39,6 +39,22 @@ class Api extends CI_Controller {
         }
         echo json_encode($msg);
     }
+
+    public function request_salida_fila(){
+        $input_data = json_decode(trim(file_get_contents('php://input')),true);
+        $this->load->model("Fila_turno");
+        $turno= new Fila_turno();
+        $turno->load_by("cod_fila_turno",$input_data['cod_fila_turno']);
+        $msg = new Mensaje_Respuesta();
+        if (!isset($turno->cod_fila_turno)){
+            $msg->set_error(1);
+        }
+        else{
+            $msg->set_error(0);
+            $turno->sacar_fila();
+        }
+        echo json_encode($msg);
+    }
     public function request_edicion(){
         $input_data = json_decode(trim(file_get_contents('php://input')),true);
         $this->load->model("Usuario_movil");
@@ -123,9 +139,13 @@ class Api extends CI_Controller {
             $if->titulo_doctor = $doctor->titulo;
             $if->hora_llegada = $t->hora_llegada;
             $if->estado_peticion='0';
+            $if->cod_turno = $t->cod_fila_turno;
             $tiempo_estimado =   $consulta->tiempo_estimado($doctor->cod_doctor);
+
             sscanf($tiempo_estimado, "%d:%d:%d", $hours, $minutes, $seconds);
             $if->tiempo_estimado = isset($seconds) ? $hours * 3600 + $minutes * 60 + $seconds : $hours * 60 + $minutes;
+            $if->tiempo_estimado *= $t->cantidad_turnos_anteriores();
+            $if->turnos_restantes = $t->cantidad_turnos_anteriores();
             array_push($info_filas,$if);
         }
         return $info_filas;
@@ -251,6 +271,8 @@ Class Info_Fila{
     public $hora_llegada;
     public $tiempo_estimado;
     public $es_cita;
+    public $turnos_restantes;
+    public $cod_turno;
 }
 Class Info_Cita{
     public $estado_peticion;

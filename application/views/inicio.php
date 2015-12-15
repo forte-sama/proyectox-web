@@ -28,35 +28,23 @@
     <div class="row">
         <div class="col-md-12">
             <header class="header_home row" style="background-image: url(/assets/img/slider_item_2.jpg);">
-                <div id="app_preview" class="col-md-4 col-md-offset-1">
-                    <img class="header_image_full_vertical" alt="app preview" src="/assets/img/app_vertical.png"/>
-                </div>
-                <div id="slider_home" class="carousel slide col-md-7" data-ride="carousel">
+                <div id="slider_home" class="carousel slide col-md-5 col-md-offset-1" data-ride="carousel">
                     <div class="col-md-12">
                         <h1 id="header_title">ProyectoX</h1>
                     </div>
-                    <!-- Indicators -->
-                    <!-- <ol class="carousel-indicators"> -->
-                    <!-- <li data-target="#slider_home" data-slide-to="0" class="active"></li>
-                    <li data-target="#slider_home" data-slide-to="1"></li> -->
-                    <!-- </ol> -->
-
-                    <!-- Wrapper for slides -->
                     <div id="home_slides" class="carousel-inner" role="listbox">
                         <div class="item active">
-                            <div class="col-md-12">
-                                <h1>Empieza a sacar provecho de tu smartphone cuando vayas a hacer fila.</h1>
+                            <div class="col-md-10">
+                                <hr>
+                                <h2><b>Empieza a sacar provecho de tu smartphone cuando vayas a hacer fila.</b></h2>
                                 <hr/>
                                 <a href="#"><img src="/assets/img/google_play_badge.png" alt="" width="230px" /></a>
                             </div>
                         </div>
-                        <!-- <div class="item">
-                            <div class="col-md-12">
-                                <h1>... Yo estoy harto?</h1>
-                                <a class="btn btn-primary btn-block" href="#">manilo</a>
-                            </div>
-                        </div> -->
                     </div>
+                </div>
+                <div id="app_preview" class="col-md-4 col-md-offset-1">
+                    <img class="header_image_full_vertical" alt="app preview" src="/assets/img/app_vertical.png"/>
                 </div>
             </header>
         </div>
