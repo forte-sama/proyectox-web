@@ -75,11 +75,11 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'port'	   => 'port',
-	'hostname' => 'hostname',
-	'username' => 'user',
-	'password' => 'password',
-	'database' => 'database',
+	'port'	   => '5432',
+	'hostname' => 'localhost',
+	'username' => 'forte',
+	'password' => 'jolopero1',
+	'database' => 'forte',
 	'dbdriver' => 'postgre',
 	'dbprefix' => '',
 	'pconnect' => FALSE,

@@ -35,13 +35,27 @@
                             </div>
                         </div>
                         <div class="control-group">
-                            <label class="control-label">Telefono / Documento de identidad</label>
+                            <label class="control-label">Documento de identidad</label>
                             <div class="controls">
                                 <input type="text"
                                 class="form-control"
                                 name="identificador"
                                 value="<?= set_value("identificador"); ?>"
-                                placeholder="809-555-8888 / 402-2284587-3"
+                                placeholder="402-2284587-3"
+                                maxlength="20"
+                                required
+                                />
+                                <p class="help-block"></p>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">Telefono</label>
+                            <div class="controls">
+                                <input type="text"
+                                class="form-control"
+                                name="identificador"
+                                value="<?= set_value("identificador"); ?>"
+                                placeholder="809-555-8888"
                                 maxlength="20"
                                 required
                                 />
