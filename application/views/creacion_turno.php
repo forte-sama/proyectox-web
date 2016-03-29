@@ -53,11 +53,10 @@
                             <div class="controls">
                                 <input type="text"
                                 class="form-control"
-                                name="identificador"
-                                value="<?= set_value("identificador"); ?>"
+                                name="extra"
+                                value="<?= set_value("extra"); ?>"
                                 placeholder="809-555-8888"
                                 maxlength="20"
-                                required
                                 />
                                 <p class="help-block"></p>
                             </div>
