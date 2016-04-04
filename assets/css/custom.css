@@ -58,10 +58,15 @@ img.header_image_full_horizontal {
     width: 100%;
 }
 
-.app_badge{
+.app_badge {
     width: 40%;
 }
 
 #btn_salir_consulta {
     height: 100%;
+}
+
+#lista_turnos {
+    max-height: 350px;
+    overflow: scroll;
 }

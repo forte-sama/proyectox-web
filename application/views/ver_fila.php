@@ -13,6 +13,13 @@
                 </div>
             </div>
             <div class="row">
+                <div class="col-md-12">
+                    <div class="well text-info text-center">
+                        <b># Pacientes en fila, # citas pendientes</b>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
                 <div id="lista_turnos" class="col-md-12">
                     <?= $turnos; ?>
                 </div>

@@ -3,8 +3,6 @@
         <div class="col-md-4" style="height: 8em;">
             <button id="btn_salir_consulta" num_turno="<?= $turno_actual['num_turno']; ?>" class="btn btn-danger btn-lg btn-block">Dar salida<br>del consultorio</button>
         </div>
-    <!-- </div>
-    <div class="row"> -->
         <div class="col-md-2 col-md-offset-1">
             <h2><i class="fa fa-user fa-3x"></i></h2>
         </div>
