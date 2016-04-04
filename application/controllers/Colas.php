@@ -139,6 +139,21 @@ class Colas extends CI_Controller {
 		echo json_encode($data);
 	}
 
+	public function ver_disponibilidad_doctor() {
+		session_start();
+
+		if(!isset($_SESSION['user_code']) || $_SESSION['user_type'] != 'asistente') {
+			redirect(base_url('site/login/'), 'refresh');
+		}
+
+		$data = array();
+		$data['template_header']     = $this->load->view('template/header','',TRUE);
+		$data['template_footer']     = $this->load->view('template/footer','',TRUE);
+		$data['manitoh']			 = "ya empezamossss";
+
+		$this->load->view('disponibilidad_doctor',$data);
+	}
+
 	public function ver_estadisticas() {
 		session_start();
 

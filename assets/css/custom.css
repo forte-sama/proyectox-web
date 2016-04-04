@@ -70,3 +70,8 @@ img.header_image_full_horizontal {
     max-height: 350px;
     overflow: scroll;
 }
+
+.centrado_full {
+    margin: auto auto;
+    position: relative;
+}

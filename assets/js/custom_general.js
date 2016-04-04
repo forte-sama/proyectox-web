@@ -25,7 +25,7 @@ $(function () {
         format: "ll",
         maxDate: new moment().format()
     });
-//Inicializando datepickers en formulario de creacion de cita (fecha)
+// Inicializando datepickers en formulario de creacion de cita (fecha)
     $("#creacion_cita_fecha").datetimepicker({
         format : 'll',
         minDate: new moment().format()
@@ -33,6 +33,10 @@ $(function () {
     $("#creacion_cita_hora").datetimepicker({
         format:  "h a",
         minDate: new moment().format()
+    });
+// Mostrando disponibilidad en formulario de creacion de cita
+    $("#ver_disponibilidad").click(function () {
+        var win = window.open('/index.php/colas/ver_disponibilidad_doctor','Disponibilidad del doctor', "width=1200, height=650");
     });
 });
 

@@ -14,9 +14,11 @@
     <link href="/assets/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
     <!-- CUSTOM STYLES-->
     <link href="/assets/css/custom.css" rel="stylesheet" type="text/css" />
-    <!-- GOOGLE FONTS-->
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
     <!-- TABLE STYLES-->
     <link href="/assets/js/dataTables/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
+    <!-- GOOGLE FONTS-->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+    <!-- FULL CALENDAR STYLES-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.6.1/fullcalendar.css" rel="stylesheet" type="text/css" />
 </head>
 <body>

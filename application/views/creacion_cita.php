@@ -33,19 +33,37 @@
                             </div>
                         </div>
                         <div class="control-group">
-                            <label class="control-label">Telefono / Documento de identidad</label>
+                            <label class="control-label">Telefono</label>
                             <div class="controls">
                                 <input type="text"
                                 class="form-control"
                                 name="identificador"
                                 value="<?= set_value("identificador"); ?>"
-                                placeholder="809-555-8888 / 402-2284587-3"
+                                placeholder="809-555-8888"
                                 maxlength="20"
                                 required
                                 />
                                 <p class="help-block"></p>
                             </div>
                         </div>
+                        <div class="control-group">
+                            <label class="control-label">Documento de identidad</label>
+                            <div class="controls">
+                                <input type="text"
+                                class="form-control"
+                                name="x"
+                                value="<?= set_value("identificador"); ?>"
+                                placeholder="402-2284587-3"
+                                maxlength="20"
+                                required
+                                />
+                                <p class="help-block"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-7">
                         <div class="control-group">
                             <label class="control-label">Fecha Programada</label>
                             <div class="controls">
@@ -73,6 +91,9 @@
                             <button type="submit" class="btn btn-danger btn-block">Programar Cita</button>
                         </div>
                     </form>
+                </div>
+                <div class="col-md-5">
+                    <button class="btn btn-primary" id="ver_disponibilidad" >Ver disponibilidad</button>
                 </div>
             </div>
         </div>
