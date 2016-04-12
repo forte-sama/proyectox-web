@@ -96,9 +96,12 @@
 <div class="modal fade" id="modal_ingreso_fila" tabindex="-1" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
+            <div class="modal-header">
+                <h3>Ingreso de paciente a la fila</h3>
+            </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-md-7">
+                    <div class="col-md-5">
                         <form action="<?= base_url('colas/crear_turno'); ?>" method="post">
                             <input type="hidden" name="form" value="true">
                             <div class="control-group">
@@ -148,10 +151,10 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-            <button type="button" class="btn btn-danger aceptar">Ingresar en fila</button>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-success aceptar">Ingresar en fila</button>
+            </div>
         </div>
     </div>
 </div>

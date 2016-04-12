@@ -27,4 +27,3 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 *.sublime-project
 
 ##diferencias entre bd local y produccion
-application/config/database.php
