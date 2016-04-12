@@ -9,7 +9,7 @@
     <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Cola <span class="caret"></span></a>
         <ul class="dropdown-menu">
-            <li><a href="<?= base_url('colas/crear_turno'); ?>"><i class="fa fa-user-plus fa-lg"></i> Ingresar Pacientes</a></li>
+            <li><a id="btn_ingreso_fila" href="<?= base_url('colas/crear_turno'); ?>"><i class="fa fa-user-plus fa-lg"></i> Ingresar Pacientes</a></li>
             <li><a href="<?= base_url('colas/ver_fila'); ?>"><i class="fa fa-list-ol fa-lg"></i> Ver Turnos</a></li>
         </ul>
     </li>

@@ -38,6 +38,12 @@ $(function () {
     $("#ver_disponibilidad").click(function () {
         var win = window.open('/index.php/colas/ver_disponibilidad_doctor','Disponibilidad del doctor', "width=1200, height=650");
     });
+
+    $("#btn_ingreso_fila").click(function (e) {
+        e.preventDefault();
+
+        $("#modal_ingreso_fila").modal('show');
+    });
 });
 
 /*========================================================*/

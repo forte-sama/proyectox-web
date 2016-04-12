@@ -44,9 +44,11 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <div class="col-md-6 col-md-offset-3">
-                        <br>
+                    <div class="col-md-5">
                         <button type="submit" class="btn btn-danger btn-block">Iniciar sesion</button>
+                    </div>
+                    <div class="col-md-5 col-md-offset-2">
+                        <button type="submit" class="btn btn-primary btn-xs">Olvide Mi Contrasena</button>
                     </div>
                 </div>
             </form>
