@@ -24,7 +24,12 @@
                     <h3>Pruebas de Caja Negra ProyectoX: Web</h3>
                 </div>
                 <div class="panel-body">
-                    <p><?= $pruebas_caja_negra_login ?></p>
+                    <h4>Prueba login de doctor correcto</h4>
+                    <p><?= $pruebas_caja_negra_login["login_doctor_correcto"] ?></p>
+                    <h4>Prueba login de asistente correcto</h4>
+                    <p><?= $pruebas_caja_negra_login["login_asistente_correcto"] ?></p>
+                    <h4>Prueba login de usuario incorrecto</h4>
+                    <p><?= $pruebas_caja_negra_login["login_usuario_incorrecto"] ?></p>
                 </div>
             </div>
             <div class="panel panel-warning">
