@@ -191,7 +191,10 @@ class Site extends CI_Controller {
         $this->crear_fila($_SESSION['user_code']);
     }
 
-    private function valid_user($login_user, $password) {
+    public function valid_user($login_user, $password) {
+        //load dependencies
+        $this->load->model(array('Doctor','Asistente'));
+
         $new_doctor = new Doctor();
         $new_doctor->load_by('username', $login_user);
 
